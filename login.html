@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ / Login - Patient Flow Analytics System</title>
+    <link rel="icon" type="image/png" href="images/mfu-logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-header">
+                <div class="navbar-brand">
+                    <div class="navbar-logo">
+                        <img src="images/mfu-logo.png" alt="MFU Logo" onerror="this.style.display='none'">
+                    </div>
+                    <div class="logo-divider"></div>
+                    <div class="navbar-title">
+                        <h1>โรงพยาบาลศูนย์การแพทย์มหาวิทยาลัยแม่ฟ้าหลวง</h1>
+                        <p>MAE FAH LUANG UNIVERSITY MEDICAL CENTER HOSPITAL</p>
+                    </div>
+                </div>
+                <div class="navbar-logo-right">
+                    <div class="mfu-logo-text">MFU<br>MCH</div>
+                </div>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="navbar-menu-wrapper" id="mobileMenu">
+                <ul class="navbar-menu">
+                    <li><a href="index.html">Homepage</a></li>
+                    <li class="dropdown">
+                        <a href="index.html#about">About us ▾</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="index.html#about-hospital">About the hospital</a></li>
+                            <li><a href="index.html#management-committee">Hospital Management Committee</a></li>
+                            <li><a href="index.html#executive-committee">Executive Committee</a></li>
+                            <li><a href="index.html#executive-duties">Powers and duties of the hospital's executive committee</a></li>
+                            <li><a href="index.html#director-duties">Powers and duties of the hospital director</a></li>
+                            <li><a href="index.html#org-structure">Organizational structure</a></li>
+                            <li><a href="index.html#operations">Operations</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="index.html#services">Our services ▾</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="index.html#outpatient">Outpatient Services</a></li>
+                            <li><a href="index.html#inpatient">Inpatient Services</a></li>
+                            <li><a href="index.html#emergency">Emergency Services</a></li>
+                            <li><a href="index.html#diagnostic">Diagnostic Services</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="index.html#donate">Donate ▾</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="index.html#donate-online">Donate Online</a></li>
+                            <li><a href="index.html#donate-bank">Bank Transfer</a></li>
+                            <li><a href="index.html#donate-contact">Contact for Donation</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="index.html#news">news ▾</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="index.html#news-announcements">Announcements</a></li>
+                            <li><a href="index.html#news-updates">Hospital Updates</a></li>
+                            <li><a href="index.html#news-events">Events</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="index.html#personnel">personnel ▾</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="index.html#doctors">Medical Staff</a></li>
+                            <li><a href="index.html#nurses">Nursing Staff</a></li>
+                            <li><a href="index.html#admin-staff">Administrative Staff</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="login.html" style="background-color: rgba(0, 0, 0, 0.1); font-weight: 600;">เข้าสู่ระบบ / Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Unified Login Form -->
+    <section class="container" style="margin-top: 3rem;">
+        <div class="form-container" style="max-width: 600px;">
+            <!-- Logo Section -->
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <img src="images/mfu-logo.png" alt="MFU Logo" style="height: 100px; margin-bottom: 1.5rem;" onerror="this.style.display='none'">
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2 style="color: var(--mfu-green); font-size: 2rem; margin-bottom: 0.5rem;">เข้าสู่ระบบ</h2>
+                <h3 style="color: var(--text-secondary); font-weight: 400; font-size: 1.25rem;">Login to Patient Flow System</h3>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="idNumber" style="font-size: 1.25rem; font-weight: 600;">
+                        เลขประจำตัว / Identification Number
+                    </label>
+                    <input 
+                        type="text" 
+                        id="idNumber" 
+                        name="idNumber" 
+                        required 
+                        placeholder="Employee ID / National ID / Passport"
+                        style="font-size: 1.25rem; padding: 1rem;"
+                        autocomplete="username"
+                    >
+                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                        ระบบจะตรวจสอบบทบาทของคุณอัตโนมัติ<br>
+                        <em>System will automatically detect your role</em>
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" style="font-size: 1.25rem; font-weight: 600;">
+                        รหัสผ่าน / Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        placeholder="Enter your password"
+                        style="font-size: 1.25rem; padding: 1rem;"
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <!-- Error message display -->
+                <div id="errorMessage" class="alert alert-danger" style="display: none; margin-bottom: 1.5rem;">
+                    <div id="errorText"></div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 2rem;">
+                    <input type="checkbox" id="remember" name="remember" style="width: auto; margin-right: 0.75rem;">
+                    <label for="remember" style="display: inline; font-size: 1.125rem;">
+                        จดจำการเข้าสู่ระบบ / Remember me
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large" style="width: 100%; font-size: 1.375rem; padding: 1.25rem;">
+                    เข้าสู่ระบบ / Login
+                </button>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+                    <button type="button" onclick="showRegistration()" class="btn" style="background: white; color: var(--mfu-green); border: 2px solid var(--mfu-green); padding: 1rem; font-size: 1.05rem; font-weight: 600; transition: all 0.3s;">
+                        <div style="margin-bottom: 0.25rem;">ลงทะเบียนผู้ป่วยใหม่</div>
+                        <div style="font-size: 0.9rem; font-weight: 400;">New Patient Registration</div>
+                    </button>
+                    <button type="button" onclick="showForgotPassword()" class="btn" style="background: white; color: var(--text-secondary); border: 2px solid #d1d5db; padding: 1rem; font-size: 1.05rem; font-weight: 600; transition: all 0.3s;">
+                        <div style="margin-bottom: 0.25rem;">ลืมรหัสผ่าน?</div>
+                        <div style="font-size: 0.9rem; font-weight: 400;">Forgot Password?</div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Demo Credentials Info -->
+    <section class="container" style="margin-top: 2rem;">
+        <div class="alert alert-success" style="max-width: 600px; margin: 0 auto;">
+            <div>
+                <strong>ข้อมูลทดสอบระบบ / Demo Credentials:</strong><br>
+                <strong>Thai Patient (คนไทย):</strong> ID: 1234567890123 / Password: patient123<br>
+                <strong>Foreign Patient (ชาวต่างชาติ):</strong> ID: AB1234567 / Password: patient123<br>
+                <strong>Doctor/Nurse (แพทย์/พยาบาล):</strong> ID: E12345 / Password: doctor123<br>
+                <strong>Admin (ผู้บริหาร):</strong> ID: A001 / Password: admin123
+            </div>
+        </div>
+    </section>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <h4>Patient Flow Analytics System</h4>
+                <p>Mae Fah Luang University<br>Medical Center Hospital</p>
+                <p>333 หมู่ 1 ตำบลท่าสุด<br>อำเภอเมือง จังหวัดเชียงราย 57100</p>
+            </div>
+            <div>
+                <h4>ติดต่อเรา / Contact</h4>
+                <p>โทร: 053-916-999</p>
+                <p>Email: info@mfumch.ac.th</p>
+                <p>เวลาทำการ: 08:00 - 20:00 น.</p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <p><a href="index.html">หน้าหลัก / Home</a></p>
+                <p><a href="login.html">เข้าสู่ระบบ / Login</a></p>
+                <p><a href="#">นโยบายความเป็นส่วนตัว / Privacy Policy</a></p>
+            </div>
+            <div>
+                <h4>ระบบ / System</h4>
+                <p>Version 1.0.0</p>
+                <p>© 2026 MFU Medical Center</p>
+                <p>All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Backend Services -->
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth-service.js"></script>
+    <script src="js/database-service.js"></script>
+    <script src="js/dashboard-service.js"></script>
+
+    <script>
+        // Initialize services on page load
+        let servicesInitialized = false;
+
+        async function initializeServices() {
+            if (servicesInitialized) return true;
+            
+            try {
+                await window.authService.init();
+                await window.databaseService.init();
+                await window.dashboardService.init();
+                servicesInitialized = true;
+                console.log('✓ Backend services initialized');
+                return true;
+            } catch (error) {
+                console.error('Failed to initialize services:', error);
+                return false;
+            }
+        }
+
+        // Check if user is already logged in
+        async function checkExistingSession() {
+            try {
+                await initializeServices();
+                const isAuth = window.authService.isAuthenticated();
+                
+                if (isAuth) {
+                    const user = window.authService.getCurrentUser();
+                    const profile = await window.authService.getUserProfile(user.id);
+                    
+                    if (profile) {
+                        // Redirect to appropriate dashboard
+                        const dashboards = {
+                            'patient': 'patient-dashboard.html',
+                            'doctor': 'doctor-dashboard.html',
+                            'nurse': 'doctor-dashboard.html',
+                            'admin': 'admin-dashboard.html'
+                        };
+                        
+                        const dashboard = dashboards[profile.role] || 'index.html';
+                        window.location.href = dashboard;
+                    }
+                }
+            } catch (error) {
+                console.error('Session check error:', error);
+            }
+        }
+
+        // Run check on page load
+        checkExistingSession();
+
+        // Automatic role detection based on ID format
+        function detectRole(idNumber) {
+            // Remove spaces and convert to uppercase
+            const cleanId = idNumber.trim().toUpperCase();
+            
+            // Admin: Starts with A followed by digits
+            if (/^A\d+$/.test(cleanId)) {
+                return {
+                    role: 'admin',
+                    type: 'Admin',
+                    typeThai: 'ผู้บริหาร',
+                    dashboard: 'admin-dashboard.html'
+                };
+            }
+            
+            // Hospital Staff (Doctor/Nurse): Starts with E followed by digits
+            if (/^E\d+$/.test(cleanId)) {
+                return {
+                    role: 'doctor',
+                    type: 'Medical Staff',
+                    typeThai: 'บุคลากรทางการแพทย์',
+                    dashboard: 'doctor-dashboard.html'
+                };
+            }
+            
+            // Thai National ID: Exactly 13 digits
+            if (/^\d{13}$/.test(cleanId)) {
+                return {
+                    role: 'patient',
+                    type: 'Thai Patient',
+                    typeThai: 'ผู้ป่วยคนไทย',
+                    dashboard: 'patient-dashboard.html'
+                };
+            }
+            
+            // Foreign Passport: Alphanumeric (letters + numbers)
+            if (/^[A-Z0-9]{6,15}$/.test(cleanId)) {
+                return {
+                    role: 'patient',
+                    type: 'Foreign Patient',
+                    typeThai: 'ผู้ป่วยชาวต่างชาติ',
+                    dashboard: 'patient-dashboard.html'
+                };
+            }
+            
+            return null;
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.innerHTML = message;
+            errorDiv.style.display = 'flex';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Hide error message
+        function hideError() {
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideError();
+            
+            const idNumber = document.getElementById('idNumber').value;
+            const password = document.getElementById('password').value;
+            const submitButton = this.querySelector('button[type="submit"]');
+            
+            // Disable submit button and show loading
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span style="display: inline-block; width: 20px; height: 20px; border: 3px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></span> กำลังเข้าสู่ระบบ... / Logging in...';
+            
+            // Detect user role from ID
+            const userInfo = detectRole(idNumber);
+            
+            if (!userInfo) {
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'เข้าสู่ระบบ / Login';
+                showError(
+                    '<strong>รูปแบบรหัสไม่ถูกต้อง / Invalid ID Format</strong><br>' +
+                    'กรุณาตรวจสอบเลขประจำตัวของคุณ<br>' +
+                    '<em>Please check your identification number</em>'
+                );
+                return;
+            }
+            
+            try {
+                // Initialize services if not already done
+                await initializeServices();
+                
+                // Attempt authentication with Supabase
+                const result = await window.authService.signIn(idNumber, password);
+                
+                if (result.success) {
+                    // Verify role matches
+                    if (result.profile && result.profile.role === userInfo.role) {
+                        // Store user info in session storage
+                        sessionStorage.setItem('userRole', result.profile.role);
+                        sessionStorage.setItem('userId', result.user.id);
+                        sessionStorage.setItem('userIdNumber', idNumber);
+                        sessionStorage.setItem('userType', userInfo.type);
+                        sessionStorage.setItem('userTypeThai', userInfo.typeThai);
+                        sessionStorage.setItem('userName', result.profile.full_name);
+                        sessionStorage.setItem('loggedIn', 'true');
+                        
+                        // Show success message
+                        showSuccessAndRedirect(userInfo);
+                    } else {
+                        throw new Error('Role mismatch or profile not found');
+                    }
+                } else {
+                    // Authentication failed - try demo mode
+                    console.log('Backend auth failed, trying demo mode...');
+                    handleDemoLogin(idNumber, password, userInfo, submitButton);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                // Fallback to demo mode
+                handleDemoLogin(idNumber, password, userInfo, submitButton);
+            }
+        });
+
+        // Handle demo login (fallback when backend is not configured)
+        function handleDemoLogin(idNumber, password, userInfo, submitButton) {
+            const demoCredentials = {
+                '1234567890123': { password: 'patient123', role: 'patient' },
+                'AB1234567': { password: 'patient123', role: 'patient' },
+                'E12345': { password: 'doctor123', role: 'doctor' },
+                'A001': { password: 'admin123', role: 'admin' }
+            };
+            
+            const cleanId = idNumber.trim().toUpperCase();
+            const credential = demoCredentials[cleanId];
+            
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'เข้าสู่ระบบ / Login';
+            
+            if (credential && credential.password === password && credential.role === userInfo.role) {
+                // Store user info for demo mode
+                sessionStorage.setItem('userRole', userInfo.role);
+                sessionStorage.setItem('userId', cleanId);
+                sessionStorage.setItem('userIdNumber', cleanId);
+                sessionStorage.setItem('userType', userInfo.type);
+                sessionStorage.setItem('userTypeThai', userInfo.typeThai);
+                sessionStorage.setItem('loggedIn', 'true');
+                sessionStorage.setItem('demoMode', 'true');
+                
+                showSuccessAndRedirect(userInfo);
+            } else {
+                showError(
+                    '<strong>รหัสผ่านไม่ถูกต้อง / Incorrect Password</strong><br>' +
+                    'กรุณาตรวจสอบรหัสผ่านของคุณ หรือใช้ข้อมูลทดสอบด้านล่าง<br>' +
+                    '<em>Please check your password or use demo credentials below</em>'
+                );
+            }
+        }
+
+        // Show success message and redirect
+        function showSuccessAndRedirect(userInfo) {
+            const successMsg = `
+                <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                            background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); 
+                            z-index: 10000; text-align: center; border: 4px solid var(--mfu-green);">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">✓</div>
+                    <h2 style="color: var(--mfu-green); margin-bottom: 0.5rem;">เข้าสู่ระบบสำเร็จ</h2>
+                    <h3 style="color: var(--mfu-green); margin-bottom: 1rem;">Login Successful</h3>
+                    <p style="font-size: 1.25rem; color: var(--text-secondary);">
+                        ${userInfo.typeThai}<br>${userInfo.type}
+                    </p>
+                    <p style="margin-top: 1rem; color: var(--text-secondary);">กำลังนำคุณไปยังหน้าแดชบอร์ด...</p>
+                </div>
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                            background: rgba(0,0,0,0.5); z-index: 9999;"></div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', successMsg);
+            
+            // Redirect after 2 seconds
+            setTimeout(() => {
+                window.location.href = userInfo.dashboard;
+            }, 2000);
+        }
+
+        // Add CSS for loading spinner
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Show registration modal
+        function showRegistration() {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s;" onclick="this.remove()">
+                    <div style="background: white; border-radius: 16px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; padding: 3rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: slideUp 0.3s;" onclick="event.stopPropagation()">
+                        <button onclick="this.closest('[style*=fixed]').remove()" style="position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 2rem; color: #6b7280; cursor: pointer; line-height: 1; padding: 0; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.3s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">&times;</button>
+                        
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2.5rem;">✓</div>
+                            <h2 style="color: var(--mfu-green); margin: 0 0 0.5rem 0; font-size: 1.75rem;">ลงทะเบียนผู้ป่วยใหม่</h2>
+                            <p style="color: var(--text-secondary); margin: 0; font-size: 1.1rem;">New Patient Registration</p>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; border-left: 4px solid var(--mfu-green);">
+                            <h3 style="color: var(--mfu-green); margin: 0 0 1rem 0; font-size: 1.25rem;">กรุณาติดต่อแผนกผู้ป่วยนอกพร้อมเอกสาร</h3>
+                            <p style="color: var(--text-secondary); margin: 0 0 0.5rem 0; font-size: 1rem; font-style: italic;">Please visit OPD with required documents</p>
+                        </div>
+                        
+                        <div style="background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 2px solid #e5e7eb;">
+                            <h4 style="color: var(--text-primary); margin: 0 0 1rem 0; font-size: 1.15rem; font-weight: 600;">เอกสารที่ต้องนำมา / Required Documents:</h4>
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                <li style="padding: 0.75rem 0; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center;">
+                                    <span style="color: var(--mfu-green); margin-right: 1rem; font-size: 1.5rem;">✓</span>
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--text-primary);">บัตรประชาชน หรือ หนังสือเดินทาง</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.95rem;">National ID or Passport</div>
+                                    </div>
+                                </li>
+                                <li style="padding: 0.75rem 0; display: flex; align-items: center;">
+                                    <span style="color: var(--mfu-green); margin-right: 1rem; font-size: 1.5rem;">✓</span>
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--text-primary);">บัตรประกันสุขภาพ (ถ้ามี)</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.95rem;">Health insurance card (if applicable)</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div style="background: #f9fafb; padding: 1.5rem; border-radius: 12px; text-align: center;">
+                            <p style="margin: 0 0 1rem 0; color: var(--text-secondary); font-size: 1rem;">หรือติดต่อสอบถามข้อมูลเพิ่มเติม / For more information</p>
+                            <a href="tel:053916999" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--mfu-green); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s; box-shadow: 0 2px 4px rgba(27, 121, 72, 0.2);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(27, 121, 72, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(27, 121, 72, 0.2)'">
+                                <span style="font-size: 1.2rem;">📞</span>
+                                <span>053-916-999</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    @keyframes slideUp {
+                        from { transform: translateY(50px); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                </style>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Show forgot password modal
+        function showForgotPassword() {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s;" onclick="this.remove()">
+                    <div style="background: white; border-radius: 16px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; padding: 3rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: slideUp 0.3s;" onclick="event.stopPropagation()">
+                        <button onclick="this.closest('[style*=fixed]').remove()" style="position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 2rem; color: #6b7280; cursor: pointer; line-height: 1; padding: 0; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.3s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">&times;</button>
+                        
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2.5rem;">🔑</div>
+                            <h2 style="color: var(--navy-blue); margin: 0 0 0.5rem 0; font-size: 1.75rem;">ลืมรหัสผ่าน</h2>
+                            <p style="color: var(--text-secondary); margin: 0; font-size: 1.1rem;">Forgot Password?</p>
+                        </div>
+                        
+                        <div style="background: #fefce8; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; border-left: 4px solid #eab308;">
+                            <p style="color: var(--text-primary); margin: 0; font-size: 1.05rem; line-height: 1.6;">กรุณาติดต่อเจ้าหน้าที่เพื่อรีเซ็ตรหัสผ่านของคุณ<br><span style="color: var(--text-secondary); font-style: italic;">Please contact our staff to reset your password</span></p>
+                        </div>
+                        
+                        <div style="background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 2px solid #e5e7eb;">
+                            <h4 style="color: var(--text-primary); margin: 0 0 1rem 0; font-size: 1.15rem; font-weight: 600;">ช่องทางติดต่อ / Contact Channels:</h4>
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                <li style="padding: 0.75rem 0; border-bottom: 1px solid #f3f4f6; display: flex; align-items: start;">
+                                    <span style="color: var(--mfu-green); margin-right: 1rem; font-size: 1.3rem; margin-top: 0.2rem;">📞</span>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">โทรศัพท์ / Phone</div>
+                                        <a href="tel:053916999" style="color: var(--mfu-green); text-decoration: none; font-size: 1.1rem; font-weight: 600;">053-916-999</a>
+                                    </div>
+                                </li>
+                                <li style="padding: 0.75rem 0; border-bottom: 1px solid #f3f4f6; display: flex; align-items: start;">
+                                    <span style="color: var(--mfu-green); margin-right: 1rem; font-size: 1.3rem; margin-top: 0.2rem;">✉️</span>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">อีเมล / Email</div>
+                                        <a href="mailto:support@mfumch.ac.th" style="color: var(--mfu-green); text-decoration: none; font-size: 1.05rem;">support@mfumch.ac.th</a>
+                                    </div>
+                                </li>
+                                <li style="padding: 0.75rem 0; display: flex; align-items: start;">
+                                    <span style="color: var(--mfu-green); margin-right: 1rem; font-size: 1.3rem; margin-top: 0.2rem;">🏥</span>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">มาที่โรงพยาบาล / Visit Hospital</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.95rem;">แผนกผู้ป่วยนอก / OPD Counter</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <button onclick="this.closest('[style*=fixed]').remove()" style="padding: 1rem 3rem; background: var(--mfu-green); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 4px rgba(27, 121, 72, 0.2);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(27, 121, 72, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(27, 121, 72, 0.2)'">ปิด / Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Auto-hide error when user starts typing
+        document.getElementById('idNumber').addEventListener('input', hideError);
+        document.getElementById('password').addEventListener('input', hideError);
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            menu.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            const navbar = document.querySelector('.navbar-container');
+            
+            if (menu && toggle && navbar) {
+                if (!navbar.contains(event.target) && menu.classList.contains('active')) {
+                    menu.classList.remove('active');
+                    toggle.classList.remove('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Flow Analytics System - MFU Medical Center</title>
+    <link rel="icon" type="image/png" href="images/mfu-logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-header">
+                <div class="navbar-brand">
+                    <div class="navbar-logo">
+                        <img src="images/mfu-logo.png" alt="MFU Logo" onerror="this.style.display='none'">
+                    </div>
+                    <div class="logo-divider"></div>
+                    <div class="navbar-title">
+                        <h1>โรงพยาบาลศูนย์การแพทย์มหาวิทยาลัยแม่ฟ้าหลวง</h1>
+                        <p>MAE FAH LUANG UNIVERSITY MEDICAL CENTER HOSPITAL</p>
+                    </div>
+                </div>
+                <div class="navbar-logo-right">
+                    <div class="mfu-logo-text">MFU<br>MCH</div>
+                </div>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="navbar-menu-wrapper" id="mobileMenu">
+                <ul class="navbar-menu">
+                    <li><a href="index.html">Homepage</a></li>
+                    <li class="dropdown">
+                        <a href="#about">About us ▾</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#about-hospital">About the hospital</a></li>
+                            <li><a href="#management-committee">Hospital Management Committee</a></li>
+                            <li><a href="#executive-committee">Executive Committee</a></li>
+                            <li><a href="#executive-duties">Powers and duties of the hospital's executive committee</a></li>
+                            <li><a href="#director-duties">Powers and duties of the hospital director</a></li>
+                            <li><a href="#org-structure">Organizational structure</a></li>
+                            <li><a href="#operations">Operations</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#services">Our services ▾</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#outpatient">Outpatient Services</a></li>
+                            <li><a href="#inpatient">Inpatient Services</a></li>
+                            <li><a href="#emergency">Emergency Services</a></li>
+                            <li><a href="#diagnostic">Diagnostic Services</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#donate">Donate ▾</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#donate-online">Donate Online</a></li>
+                            <li><a href="#donate-bank">Bank Transfer</a></li>
+                            <li><a href="#donate-contact">Contact for Donation</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#news">news ▾</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#news-announcements">Announcements</a></li>
+                            <li><a href="#news-updates">Hospital Updates</a></li>
+                            <li><a href="#news-events">Events</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#personnel">personnel ▾</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#doctors">Medical Staff</a></li>
+                            <li><a href="#nurses">Nursing Staff</a></li>
+                            <li><a href="#admin-staff">Administrative Staff</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="login.html" style="background-color: rgba(0, 0, 0, 0.1); font-weight: 600;">เข้าสู่รๅบบ / Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    
+    </section>
+
+    <!-- Current Status Overview -->
+    <section class="container">
+        <h2 class="text-center" style="margin-top: 3rem; color: var(--mfu-green);">สถานะปัจจุบัน / Current Status</h2>
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value">24</div>
+                <div class="stat-label">ผู้ป่วยในคิว<br>Patients in Queue</div>
+                <div class="stat-change positive">↓ ลดลง 3 คน</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">15</div>
+                <div class="stat-label">นาที<br>Average Wait Time</div>
+                <div class="stat-change positive">↓ ดีขึ้น 5 นาที</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">8</div>
+                <div class="stat-label">ห้องตรวจ<br>Active Rooms</div>
+                <div class="stat-change">→ คงที่</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">142</div>
+                <div class="stat-label">ผู้ป่วยวันนี้<br>Today's Patients</div>
+                <div class="stat-change positive">↑ เพิ่ม 12 คน</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alert Section -->
+    <section class="container">
+        <div class="alert alert-info">
+            <div>
+                <strong>ประกาศ / Announcement:</strong> ระบบคาดการณ์เวลารอคอยทำงานปกติ - AI wait-time prediction is operating normally
+            </div>
+        </div>
+    </section>
+    <!-- Key Features -->
+    <section class="container" id="about" style="margin-top: 4rem;">
+        <h2 class="text-center" style="color: var(--mfu-green); margin-bottom: 2rem;">ความสามารถหลัก / Key Features</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>AI Wait-Time Prediction</h3>
+                <p>ทำนายเวลารอคอยด้วยปัญญาประดิษฐ์ที่แม่นยำ</p>
+                <p style="font-size: 0.95rem; color: var(--text-secondary);">Accurate AI-powered wait time forecasting</p>
+            </div>
+            <div class="card">
+                <h3>Real-Time Queue Tracking</h3>
+                <p>ติดตามสถานะคิวแบบเรียลไทม์</p>
+                <p style="font-size: 0.95rem; color: var(--text-secondary);">Live queue status monitoring</p>
+            </div>
+            <div class="card">
+                <h3>Flow Analytics</h3>
+                <p>วิเคราะห์การไหลของผู้ป่วยอย่างละเอียด</p>
+                <p style="font-size: 0.95rem; color: var(--text-secondary);">Detailed patient flow analysis</p>
+            </div>
+            <div class="card">
+                <h3>Smart Notifications</h3>
+                <p>แจ้งเตือนอัจฉริยะผ่านระบบ</p>
+                <p style="font-size: 0.95rem; color: var(--text-secondary);">Intelligent notification system</p>
+            </div>
+            <div class="card">
+                <h3>Elderly-Friendly Design</h3>
+                <p>ออกแบบเพื่อผู้สูงอายุ อ่านง่าย ใช้งานสะดวก</p>
+                <p style="font-size: 0.95rem; color: var(--text-secondary);">Easy-to-read interface for elderly users</p>
+            </div>
+            <div class="card">
+                <h3>Institutional Trust</h3>
+                <p>ระบบที่น่าเชื่อถือและปลอดภัย</p>
+                <p style="font-size: 0.95rem; color: var(--text-secondary);">Trustworthy and secure system</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donate Section -->
+    <section class="container" id="donate" style="margin-top: 4rem;">
+        <h2 class="text-center" style="color: var(--mfu-green); margin-bottom: 2rem;">ร่วมบริจาค / Donate</h2>
+        <div style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">
+            <p style="font-size: 1.1rem; line-height: 1.8;">ร่วมสนับสนุนโรงพยาบาลในการพัฒนาคุณภาพการให้บริการและสิ่งอำนวยความสะดวกแก่ผู้ป่วย</p>
+            <p style="font-size: 1rem; color: var(--text-secondary);">Support us in improving healthcare quality and patient facilities</p>
+        </div>
+        
+        <div class="card-grid">
+            <div class="card" id="donate-online">
+                <h3 class="text-mfu-green">บริจาคออนไลน์</h3>
+                <h4>Donate Online</h4>
+                <p style="font-size: 1rem; margin: 1.5rem 0;">บริจาคผ่านระบบออนไลน์ที่สะดวกและปลอดภัย</p>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Quick and secure online donation system</p>
+                <ul style="text-align: left; line-height: 2; margin-bottom: 1.5rem;">
+                    <li>รองรับบัตรเครดิต/เดบิต / Credit/Debit Cards</li>
+                    <li>Mobile Banking / ธนาคารมือถือ</li>
+                    <li>QR Code PromptPay</li>
+                    <li>E-Wallet / กระเป๋าเงินอิเล็กทรอนิกส์</li>
+                </ul>
+                <button class="btn btn-primary" style="width: 100%;">บริจาคเลย / Donate Now</button>
+            </div>
+
+            <div class="card" id="donate-bank">
+                <h3 class="text-mfu-green">โอนเงินผ่านธนาคาร</h3>
+                <h4>Bank Transfer</h4>
+                <p style="font-size: 1rem; margin: 1.5rem 0;">โอนเงินโดยตรงเข้าบัญชีธนาคารของโรงพยาบาล</p>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Direct bank transfer to hospital account</p>
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: left;">
+                    <p style="margin-bottom: 0.5rem;"><strong>ธนาคารกรุงไทย / Krungthai Bank</strong></p>
+                    <p style="margin-bottom: 0.5rem;">เลขที่บัญชี / Account No: <strong>123-4-56789-0</strong></p>
+                    <p style="margin-bottom: 0.5rem;">ชื่อบัญชี / Account Name:</p>
+                    <p style="margin-bottom: 0;">โรงพยาบาลศูนย์การแพทย์มหาวิทยาลัยแม่ฟ้าหลวง</p>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">*กรุณาส่งสลิปการโอนเพื่อรับใบเสร็จรับเงิน</p>
+            </div>
+
+            <div class="card" id="donate-contact">
+                <h3 class="text-mfu-green">ติดต่อเพื่อบริจาค</h3>
+                <h4>Contact for Donation</h4>
+                <p style="font-size: 1rem; margin: 1.5rem 0;">สอบถามข้อมูลเพิ่มเติมหรือบริจาคในรูปแบบอื่น</p>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem;">For inquiries or alternative donation methods</p>
+                <ul style="text-align: left; line-height: 2.5; list-style: none; padding: 0;">
+                    <li>📞 โทร / Tel: <strong>053-916-999 ต่อ 1234</strong></li>
+                    <li>📧 Email: <strong>donate@mfumch.ac.th</strong></li>
+                    <li>🕐 เวลาทำการ / Working Hours:<br><strong>จันทร์-ศุกร์ 08:00-16:30</strong></li>
+                </ul>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1.5rem;">บริจาคอุปกรณ์การแพทย์ / Medical Equipment Donations</p>
+                <p style="font-size: 0.9rem; color: var(--text-secondary);">บริจาคที่ดิน/อาคาร / Property Donations</p>
+            </div>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 2rem; border-radius: 12px; margin-top: 3rem; text-align: center;">
+            <h3 style="color: var(--mfu-green); margin-bottom: 1rem;">ประโยชน์ที่คุณได้รับ / Donor Benefits</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div>
+                    <h4>✓ ใบเสร็จรับเงิน</h4>
+                    <p style="color: var(--text-secondary);">Tax deductible receipt</p>
+                </div>
+                <div>
+                    <h4>✓ รายงานการใช้เงิน</h4>
+                    <p style="color: var(--text-secondary);">Transparent fund usage report</p>
+                </div>
+                <div>
+                    <h4>✓ ใบประกาศเกียรติคุณ</h4>
+                    <p style="color: var(--text-secondary);">Certificate of appreciation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personnel Section -->
+    <section class="container" id="personnel" style="margin-top: 4rem;">
+        <h2 class="text-center" style="color: var(--mfu-green); margin-bottom: 2rem;">บุคลากร / Personnel</h2>
+        <div style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">
+            <p style="font-size: 1.1rem; line-height: 1.8;">ทีมบุคลากรทางการแพทย์ที่มีคุณภาพและประสบการณ์ พร้อมให้บริการด้วยใจ</p>
+            <p style="font-size: 1rem; color: var(--text-secondary);">Experienced and dedicated medical professionals ready to serve you</p>
+        </div>
+
+        <!-- Medical Staff -->
+        <div style="margin-bottom: 4rem;" id="doctors">
+            <h3 style="color: var(--mfu-green); margin-bottom: 2rem; font-size: 1.8rem;">แพทย์ / Medical Staff</h3>
+            <div class="card-grid">
+                <div class="card" style="text-align: center;">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #B8860B 0%, #C9A030 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">
+                        ดร.
+                    </div>
+                    <h4>นพ.สมชาย ใจดี</h4>
+                    <p style="color: var(--mfu-green); font-weight: 600;">Dr. Somchai Jaidee</p>
+                    <p style="font-size: 0.95rem; margin: 0.5rem 0;">ผู้อำนวยการโรงพยาบาล</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Hospital Director</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">จักษุวิทยา / Ophthalmology</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">ประสบการณ์ 25 ปี / 25+ years</p>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #2C5F2D 0%, #97BC62 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">
+                        ดร.
+                    </div>
+                    <h4>พญ.สุดา วงศ์ดี</h4>
+                    <p style="color: var(--mfu-green); font-weight: 600;">Dr. Suda Wongdee</p>
+                    <p style="font-size: 0.95rem; margin: 0.5rem 0;">รองผู้อำนวยการฝ่ายการแพทย์</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Deputy Director - Medical Services</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">อายุรกรรม / Internal Medicine</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">ประสบการณ์ 20 ปี / 20+ years</p>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #B8860B 0%, #C9A030 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">
+                        ดร.
+                    </div>
+                    <h4>นพ.ประยุทธ มั่นคง</h4>
+                    <p style="color: var(--mfu-green); font-weight: 600;">Dr. Prayuth Mankong</p>
+                    <p style="font-size: 0.95rem; margin: 0.5rem 0;">ศัลยแพทย์หัวหน้า</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Chief Surgeon</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">ศัลยกรรมออร์โธปิดิกส์ / Orthopedics</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">ประสบการณ์ 18 ปี / 18+ years</p>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #2C5F2D 0%, #97BC62 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">
+                        ดร.
+                    </div>
+                    <h4>พญ.วรรณา สุขสม</h4>
+                    <p style="color: var(--mfu-green); font-weight: 600;">Dr. Wanna Sooksam</p>
+                    <p style="font-size: 0.95rem; margin: 0.5rem 0;">กุมารแพทย์หัวหน้า</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Chief Pediatrician</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">กุมารเวชกรรม / Pediatrics</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">ประสบการณ์ 15 ปี / 15+ years</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nursing Staff -->
+        <div style="margin-bottom: 4rem;" id="nurses">
+            <h3 style="color: var(--mfu-green); margin-bottom: 2rem; font-size: 1.8rem;">พยาบาล / Nursing Staff</h3>
+            <div class="card-grid">
+                <div class="card" style="text-align: center;">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #2C5F2D 0%, #97BC62 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">
+                        พย.
+                    </div>
+                    <h4>กมลชนก สีทอง</h4>
+                    <p style="color: var(--mfu-green); font-weight: 600;">Kamolchanok Seethong, RN</p>
+                    <p style="font-size: 0.95rem; margin: 0.5rem 0;">หัวหน้าพยาบาล</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Head Nurse</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">แผนก OPD / OPD Department</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">ประสบการณ์ 22 ปี / 22+ years</p>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #B8860B 0%, #C9A030 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">
+                        พย.
+                    </div>
+                    <h4>สิริพร แก้วขาว</h4>
+                    <p style="color: var(--mfu-green); font-weight: 600;">Siriporn Kaewkhaw, RN</p>
+                    <p style="font-size: 0.95rem; margin: 0.5rem 0;">พยาบาลหัวหน้ากะ</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Shift Supervisor</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">แผนกอุบัติเหตุฉุกเฉิน / Emergency</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">ประสบการณ์ 12 ปี / 12+ years</p>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #2C5F2D 0%, #97BC62 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">
+                        พย.
+                    </div>
+                    <h4>อรุณี ศรีสุข</h4>
+                    <p style="color: var(--mfu-green); font-weight: 600;">Arunee Srisuk, RN</p>
+                    <p style="font-size: 0.95rem; margin: 0.5rem 0;">พยาบาลประจำแผนก</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Ward Nurse</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">แผนกผู้ป่วยใน / IPD Department</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">ประสบการณ์ 10 ปี / 10+ years</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Administrative Staff -->
+        <div style="margin-bottom: 2rem;" id="admin-staff">
+            <h3 style="color: var(--mfu-green); margin-bottom: 2rem; font-size: 1.8rem;">ฝ่ายบริหาร / Administrative Staff</h3>
+            <div class="card-grid">
+                <div class="card" style="text-align: center;">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #B8860B 0%, #C9A030 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">
+                        ผจ.
+                    </div>
+                    <h4>นายสมบูรณ์ รุ่งเรือง</h4>
+                    <p style="color: var(--mfu-green); font-weight: 600;">Somboon Rungruang</p>
+                    <p style="font-size: 0.95rem; margin: 0.5rem 0;">ผู้จัดการฝ่ายบริหาร</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Administrative Manager</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">บริหารทั่วไป / General Administration</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">ประสบการณ์ 16 ปี / 16+ years</p>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #2C5F2D 0%, #97BC62 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">
+                        คส.
+                    </div>
+                    <h4>น.ส.จิราพร ใจเย็น</h4>
+                    <p style="color: var(--mfu-green); font-weight: 600;">Jiraporn Jaiyen</p>
+                    <p style="font-size: 0.95rem; margin: 0.5rem 0;">หัวหน้าฝ่ายการเงิน</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Finance Manager</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">การเงินและบัญชี / Finance & Accounting</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">ประสบการณ์ 14 ปี / 14+ years</p>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #B8860B 0%, #C9A030 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">
+                        ทส.
+                    </div>
+                    <h4>นายธีรพงศ์ เทคโนโลยี</h4>
+                    <p style="color: var(--mfu-green); font-weight: 600;">Teerapong Technology</p>
+                    <p style="font-size: 0.95rem; margin: 0.5rem 0;">หัวหน้าฝ่ายเทคโนโลยีสารสนเทศ</p>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">IT Manager</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">เทคโนโลยีสารสนเทศ / Information Technology</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">ประสบการณ์ 11 ปี / 11+ years</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 2rem; border-radius: 12px; margin-top: 3rem; text-align: center;">
+            <h3 style="color: var(--mfu-green); margin-bottom: 1rem;">สมัครงาน / Career Opportunities</h3>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">เข้าร่วมทีมงานของเรา / Join Our Team</p>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">เรากำลังมองหาบุคลากรที่มีความสามารถและทุ่มเทเพื่อสร้างสรรค์บริการทางการแพทย์ที่ดีเลิศ</p>
+            <button class="btn btn-primary">ดูตำแหน่งงานว่าง / View Openings</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <h4>Patient Flow Analytics System</h4>
+                <p>Mae Fah Luang University<br>Medical Center Hospital</p>
+                <p>333 หมู่ 1 ตำบลท่าสุด<br>อำเภอเมือง จังหวัดเชียงราย 57100</p>
+            </div>
+            <div>
+                <h4>ติดต่อเรา / Contact</h4>
+                <p>โทร: 053-916-999</p>
+                <p>Email: info@mfumch.ac.th</p>
+                <p>เวลาทำการ: 08:00 - 20:00 น.</p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <p><a href="index.html">หน้าหลัก / Home</a></p>
+                <p><a href="login.html">เข้าสู่ระบบ / Login</a></p>
+                <p><a href="#">นโยบายความเป็นส่วนตัว / Privacy Policy</a></p>
+            </div>
+            <div>
+                <h4>ระบบ / System</h4>
+                <p>Version 1.0.0</p>
+                <p>© 2026 MFU Medical Center</p>
+                <p>All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            menu.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            const navbar = document.querySelector('.navbar-container');
+            
+            if (menu && toggle && navbar) {
+                if (!navbar.contains(event.target) && menu.classList.contains('active')) {
+                    menu.classList.remove('active');
+                    toggle.classList.remove('active');
+                }
+            }
+        });
+        
+        // Handle dropdown clicks on mobile
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.dropdown > a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const parent = this.parentElement;
+                    const dropdownMenu = parent.querySelector('.dropdown-menu');
+                    
+                    // Close other dropdowns
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        if (menu !== dropdownMenu) {
+                            menu.style.display = 'none';
+                        }
+                    });
+                    
+                    // Toggle current dropdown
+                    if (dropdownMenu.style.display === 'block') {
+                        dropdownMenu.style.display = 'none';
+                    } else {
+                        dropdownMenu.style.display = 'block';
+                    }
+                });
+            });
+        }
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.navbar-menu a:not(.dropdown > a)').forEach(link => {
+            link.addEventListener('click', function() {
+                const menu = document.getElementById('mobileMenu');
+                const toggle = document.querySelector('.mobile-menu-toggle');
+                if (menu && toggle && window.innerWidth <= 768) {
+                    menu.classList.remove('active');
+                    toggle.classList.remove('active');
+                }
+            });
+        });
+        
+        // Reset dropdowns on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                const menu = document.getElementById('mobileMenu');
+                const toggle = document.querySelector('.mobile-menu-toggle');
+                if (menu && toggle) {
+                    menu.classList.remove('active');
+                    toggle.classList.remove('active');
+                }
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = '';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

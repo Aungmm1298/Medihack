@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Connection Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        .status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .test-result {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        button {
+            background: var(--mfu-green);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        button:hover {
+            background: var(--mfu-green-dark);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--mfu-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>🔌 Backend Connection Test</h1>
+    <p style="color: #666; margin-bottom: 2rem;">Test your Supabase backend connection</p>
+
+    <!-- Connection Status -->
+    <div class="test-card">
+        <h2>1. Connection Status</h2>
+        <div id="connectionStatus" class="status pending">Testing connection...</div>
+        <div id="connectionResult" class="test-result" style="display: none;"></div>
+    </div>
+
+    <!-- Configuration Check -->
+    <div class="test-card">
+        <h2>2. Configuration Check</h2>
+        <div id="configStatus" class="status pending">Checking configuration...</div>
+        <div id="configResult" class="test-result" style="display: none;"></div>
+    </div>
+
+    <!-- Database Test -->
+    <div class="test-card">
+        <h2>3. Database Access Test</h2>
+        <button id="testDbButton" onclick="testDatabase()">Run Database Test</button>
+        <div id="dbStatus" style="margin-top: 1rem;"></div>
+        <div id="dbResult" class="test-result" style="display: none;"></div>
+    </div>
+
+    <!-- Authentication Test -->
+    <div class="test-card">
+        <h2>4. Authentication Test</h2>
+        <p style="color: #666; font-size: 0.9rem;">Test with demo credentials</p>
+        <button onclick="testAuth('1234567890123@medihack.local', 'patient123')">Test Patient Login</button>
+        <button onclick="testAuth('E12345@medihack.local', 'doctor123')">Test Doctor Login</button>
+        <div id="authStatus" style="margin-top: 1rem;"></div>
+        <div id="authResult" class="test-result" style="display: none;"></div>
+    </div>
+
+    <!-- Actions -->
+    <div class="test-card">
+        <h2>5. Quick Actions</h2>
+        <button onclick="window.location.href='login.html'">Go to Login Page</button>
+        <button onclick="location.reload()">Refresh Tests</button>
+        <button onclick="clearTests()">Clear Results</button>
+    </div>
+
+    <!-- Backend Services -->
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth-service.js"></script>
+    <script src="js/database-service.js"></script>
+
+    <script>
+        // Test results storage
+        const testResults = {
+            connection: null,
+            config: null,
+            database: null,
+            auth: null
+        };
+
+        // Auto-run tests on load
+        window.addEventListener('DOMContentLoaded', async () => {
+            await testConnection();
+            await testConfiguration();
+        });
+
+        // Test 1: Connection Status
+        async function testConnection() {
+            const statusEl = document.getElementById('connectionStatus');
+            const resultEl = document.getElementById('connectionResult');
+
+            try {
+                statusEl.innerHTML = '<span class="spinner"></span> Testing connection...';
+                
+                // Initialize services
+                await initializeServices();
+                
+                // Get Supabase client
+                const client = getSupabaseClient();
+                
+                if (client && client.supabaseUrl) {
+                    statusEl.className = 'status success';
+                    statusEl.innerHTML = ' Connected to Supabase';
+                    
+                    resultEl.style.display = 'block';
+                    resultEl.innerHTML = `
+<strong>Supabase URL:</strong> ${client.supabaseUrl}
+<strong>Status:</strong> Active
+<strong>Timestamp:</strong> ${new Date().toLocaleString()}
+                    `;
+                    
+                    testResults.connection = true;
+                } else {
+                    throw new Error('Supabase client not initialized');
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = ' Connection Failed';
+                
+                resultEl.style.display = 'block';
+                resultEl.innerHTML = `
+<strong>Error:</strong> ${error.message}
+<strong>Details:</strong> Make sure Supabase credentials are configured in js/supabase-config.js
+                `;
+                
+                testResults.connection = false;
+            }
+        }
+
+        // Test 2: Configuration Check
+        async function testConfiguration() {
+            const statusEl = document.getElementById('configStatus');
+            const resultEl = document.getElementById('configResult');
+
+            try {
+                statusEl.innerHTML = '<span class="spinner"></span> Checking configuration...';
+                
+                const config = SUPABASE_CONFIG;
+                
+                const checks = {
+                    'URL Configured': config.url && !config.url.includes('YOUR_'),
+                    'API Key Configured': config.anonKey && !config.anonKey.includes('YOUR_'),
+                    'URL Format Valid': config.url && config.url.startsWith('https://'),
+                    'API Key Format Valid': config.anonKey && config.anonKey.startsWith('eyJ')
+                };
+                
+                const allPassed = Object.values(checks).every(v => v === true);
+                
+                if (allPassed) {
+                    statusEl.className = 'status success';
+                    statusEl.innerHTML = 'Configuration Valid';
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.innerHTML = 'Configuration Issues';
+                }
+                
+                resultEl.style.display = 'block';
+                resultEl.innerHTML = Object.entries(checks)
+                    .map(([key, value]) => `${value ? '✅' : '❌'} ${key}`)
+                    .join('\n');
+                
+                testResults.config = allPassed;
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = 'Configuration Error';
+                
+                resultEl.style.display = 'block';
+                resultEl.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                
+                testResults.config = false;
+            }
+        }
+
+        // Test 3: Database Access
+        async function testDatabase() {
+            const statusEl = document.getElementById('dbStatus');
+            const resultEl = document.getElementById('dbResult');
+            const button = document.getElementById('testDbButton');
+
+            try {
+                button.disabled = true;
+                statusEl.innerHTML = '<div class="status pending"><span class="spinner"></span> Testing database access...</div>';
+                resultEl.style.display = 'none';
+                
+                await initializeServices();
+                const db = window.databaseService;
+                
+                // Test read access to dashboard
+                const result = await db.getRealTimeDashboard();
+                
+                statusEl.innerHTML = '<div class="status success">Database Access Successful</div>';
+                resultEl.style.display = 'block';
+                resultEl.innerHTML = `
+<strong>Test:</strong> Read real_time_dashboard table
+<strong>Result:</strong> ${result.success ? 'SUCCESS' : 'FAILED'}
+<strong>Data Retrieved:</strong> ${JSON.stringify(result.data, null, 2)}
+                `;
+                
+                testResults.database = result.success;
+            } catch (error) {
+                statusEl.innerHTML = '<div class="status error">Database Access Failed</div>';
+                resultEl.style.display = 'block';
+                resultEl.innerHTML = `
+<strong>Error:</strong> ${error.message}
+<strong>Possible Causes:</strong>
+- Database tables not created (run database-setup.sql)
+- Row Level Security policies blocking access
+- Network/connection issues
+                `;
+                
+                testResults.database = false;
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // Test 4: Authentication
+        async function testAuth(email, password) {
+            const statusEl = document.getElementById('authStatus');
+            const resultEl = document.getElementById('authResult');
+
+            try {
+                statusEl.innerHTML = '<div class="status pending"><span class="spinner"></span> Testing authentication...</div>';
+                resultEl.style.display = 'none';
+                
+                await initializeServices();
+                const auth = window.authService;
+                
+                // Try to sign in
+                const result = await auth.signIn(email, password);
+                
+                if (result.success) {
+                    statusEl.innerHTML = '<div class="status success">Authentication Successful</div>';
+                    resultEl.style.display = 'block';
+                    resultEl.innerHTML = `
+<strong>Email:</strong> ${email}
+<strong>User ID:</strong> ${result.user?.id}
+<strong>Role:</strong> ${result.profile?.role || 'N/A'}
+<strong>Full Name:</strong> ${result.profile?.full_name || 'N/A'}
+
+<strong>Note:</strong> User authenticated successfully!
+                    `;
+                    
+                    // Sign out to clean up
+                    await auth.signOut();
+                    
+                    testResults.auth = true;
+                } else {
+                    throw new Error(result.error || 'Authentication failed');
+                }
+            } catch (error) {
+                statusEl.innerHTML = '<div class="status error">Authentication Failed</div>';
+                resultEl.style.display = 'block';
+                resultEl.innerHTML = `
+<strong>Email:</strong> ${email}
+<strong>Error:</strong> ${error.message}
+
+<strong>Possible Causes:</strong>
+- User not created in Authentication > Users
+- Wrong password
+- user_profiles table not populated
+- Email confirmation required (check Auth settings)
+                `;
+                
+                testResults.auth = false;
+            }
+        }
+
+        // Clear all test results
+        function clearTests() {
+            ['connectionResult', 'configResult', 'dbResult', 'authResult'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+                document.getElementById(id).innerHTML = '';
+            });
+            
+            document.getElementById('dbStatus').innerHTML = '';
+            document.getElementById('authStatus').innerHTML = '';
+        }
+
+        // Export test results
+        window.getTestResults = () => testResults;
+    </script>
+</body>
+</html>

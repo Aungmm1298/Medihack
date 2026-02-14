@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Input - MFU Medical Center</title>
+    <link rel="icon" type="image/png" href="images/mfu-logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .input-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        .input-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        .tab:hover {
+            color: var(--mfu-green);
+        }
+        .tab.active {
+            color: var(--mfu-green);
+            border-bottom-color: var(--mfu-green);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Sarabun', sans-serif;
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--mfu-green);
+            box-shadow: 0 0 0 3px rgba(27, 121, 72, 0.1);
+        }
+        .form-group small {
+            display: block;
+            margin-top: 0.25rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .btn {
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: var(--mfu-green);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--mfu-green-dark);
+        }
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        .btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+        }
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        .alert.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+        .alert.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        .alert.show {
+            display: block;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .quick-fill {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+        }
+        .quick-fill h4 {
+            margin-bottom: 0.5rem;
+            color: var(--mfu-green);
+        }
+        .quick-fill button {
+            margin-right: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .quick-fill button:hover {
+            background: var(--mfu-green);
+            color: white;
+            border-color: var(--mfu-green);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-header">
+                <div class="navbar-brand">
+                    <div class="navbar-logo">
+                        <img src="images/mfu-logo.png" alt="MFU Logo" onerror="this.style.display='none'">
+                    </div>
+                    <div class="logo-divider"></div>
+                    <div class="navbar-title">
+                        <h1>โรงพยาบาลศูนย์การแพทย์มหาวิทยาลัยแม่ฟ้าหลวง</h1>
+                        <p>MAE FAH LUANG UNIVERSITY MEDICAL CENTER HOSPITAL</p>
+                    </div>
+                </div>
+                <div class="navbar-logo-right">
+                    <div class="mfu-logo-text">MFU<br>MCH</div>
+                </div>
+            </div>
+            <div class="navbar-menu-wrapper">
+                <ul class="navbar-menu">
+                    <li><a href="index.html">Homepage</a></li>
+                    <li><a href="test-connection.html">Test Connection</a></li>
+                    <li><a href="data-input.html" style="background-color: rgba(0, 0, 0, 0.1); font-weight: 600;">Data Input</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="input-container">
+        <h1 style="color: var(--mfu-green); margin-bottom: 0.5rem;">📝 Data Input System</h1>
+        <p style="color: #6b7280; margin-bottom: 2rem;">Add patients, appointments, and other data to the database</p>
+
+        <!-- Connection Status -->
+        <div id="connectionAlert" class="alert"></div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('patient')">👤 Add Patient</button>
+            <button class="tab" onclick="switchTab('appointment')">📅 Add Appointment</button>
+            <button class="tab" onclick="switchTab('queue')">🎫 Add to Queue</button>
+            <button class="tab" onclick="switchTab('sample')">🗂️ Sample Data</button>
+        </div>
+
+        <!-- Patient Form -->
+        <div id="patientTab" class="tab-content active">
+            <div class="input-card">
+                <h2 style="color: var(--mfu-green); margin-bottom: 1.5rem;">Add New Patient</h2>
+                
+                <div class="quick-fill">
+                    <h4>Quick Fill Templates:</h4>
+                    <button onclick="fillPatientDemo('thai')">Thai Patient Example</button>
+                    <button onclick="fillPatientDemo('foreign')">Foreign Patient Example</button>
+                    <button onclick="clearPatientForm()">Clear Form</button>
+                </div>
+
+                <div id="patientAlert" class="alert"></div>
+
+                <form id="patientForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>ID Number / เลขประจำตัว *</label>
+                            <input type="text" id="patientIdNumber" required>
+                            <small>Thai: 13 digits | Foreign: Passport number</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name / ชื่อ-นามสกุล *</label>
+                            <input type="text" id="patientName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Date of Birth / วันเกิด *</label>
+                            <input type="date" id="patientDOB" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender / เพศ *</label>
+                            <select id="patientGender" required>
+                                <option value="">Select...</option>
+                                <option value="male">Male / ชาย</option>
+                                <option value="female">Female / หญิง</option>
+                                <option value="other">Other / อื่นๆ</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Blood Type / หมู่เลือด</label>
+                            <select id="patientBloodType">
+                                <option value="">Select...</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="AB">AB</option>
+                                <option value="O">O</option>
+                                <option value="A+">A+</option>
+                                <option value="B+">B+</option>
+                                <option value="AB+">AB+</option>
+                                <option value="O+">O+</option>
+                                <option value="A-">A-</option>
+                                <option value="B-">B-</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone / เบอร์โทร *</label>
+                            <input type="tel" id="patientPhone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email / อีเมล</label>
+                        <input type="email" id="patientEmail">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address / ที่อยู่</label>
+                        <textarea id="patientAddress"></textarea>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Emergency Contact Name / ชื่อผู้ติดต่อฉุกเฉิน</label>
+                            <input type="text" id="patientEmergencyName">
+                        </div>
+                        <div class="form-group">
+                            <label>Emergency Contact Phone / เบอร์ติดต่อฉุกเฉิน</label>
+                            <input type="tel" id="patientEmergencyPhone">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Allergies / ประวัติแพ้ยา (comma separated)</label>
+                        <input type="text" id="patientAllergies" placeholder="e.g., Penicillin, Aspirin">
+                        <small>Separate multiple allergies with commas</small>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">➕ Add Patient</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearPatientForm()">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Appointment Form -->
+        <div id="appointmentTab" class="tab-content">
+            <div class="input-card">
+                <h2 style="color: var(--mfu-green); margin-bottom: 1.5rem;">Schedule Appointment</h2>
+                
+                <div id="appointmentAlert" class="alert"></div>
+
+                <form id="appointmentForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Patient ID Number *</label>
+                            <input type="text" id="apptPatientId" required>
+                            <small>Enter existing patient ID number</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Department / แผนก *</label>
+                            <select id="apptDepartment" required>
+                                <option value="">Select...</option>
+                                <option value="Emergency">Emergency / ฉุกเฉิน</option>
+                                <option value="Internal Medicine">Internal Medicine / อายุรกรรม</option>
+                                <option value="Pediatrics">Pediatrics / กุมารเวชกรรม</option>
+                                <option value="Surgery">Surgery / ศัลยกรรม</option>
+                                <option value="Orthopedics">Orthopedics / ออร์โธปิดิกส์</option>
+                                <option value="Cardiology">Cardiology / หัวใจ</option>
+                                <option value="Dermatology">Dermatology / ผิวหนัง</option>
+                                <option value="ENT">ENT / หู คอ จมูก</option>
+                                <option value="Ophthalmology">Ophthalmology / จักษุ</option>
+                                <option value="Dentistry">Dentistry / ทันตกรรม</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Appointment Date *</label>
+                            <input type="date" id="apptDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Appointment Time *</label>
+                            <input type="time" id="apptTime" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Appointment Type</label>
+                        <select id="apptType">
+                            <option value="Consultation">Consultation / ตรวจรักษา</option>
+                            <option value="Follow-up">Follow-up / ติดตามผล</option>
+                            <option value="Emergency">Emergency / ฉุกเฉิน</option>
+                            <option value="Checkup">Checkup / ตรวจสุขภาพ</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Reason / เหตุผลการนัด</label>
+                        <textarea id="apptReason"></textarea>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">📅 Schedule Appointment</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearAppointmentForm()">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Queue Form -->
+        <div id="queueTab" class="tab-content">
+            <div class="input-card">
+                <h2 style="color: var(--mfu-green); margin-bottom: 1.5rem;">Add Patient to Queue</h2>
+                
+                <div id="queueAlert" class="alert"></div>
+
+                <form id="queueForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Patient ID Number *</label>
+                            <input type="text" id="queuePatientId" required>
+                            <small>Enter existing patient ID number</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Department *</label>
+                            <select id="queueDepartment" required>
+                                <option value="">Select...</option>
+                                <option value="Emergency">Emergency</option>
+                                <option value="Internal Medicine">Internal Medicine</option>
+                                <option value="Pediatrics">Pediatrics</option>
+                                <option value="Surgery">Surgery</option>
+                                <option value="Orthopedics">Orthopedics</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Queue Number *</label>
+                            <input type="number" id="queueNumber" required min="1">
+                            <small>Sequential number for this department</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Priority *</label>
+                            <select id="queuePriority" required>
+                                <option value="normal">Normal</option>
+                                <option value="urgent">Urgent</option>
+                                <option value="emergency">Emergency</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Estimated Wait Time (minutes)</label>
+                        <input type="number" id="queueWaitTime" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="queueNotes"></textarea>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">🎫 Add to Queue</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearQueueForm()">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sample Data -->
+        <div id="sampleTab" class="tab-content">
+            <div class="input-card">
+                <h2 style="color: var(--mfu-green); margin-bottom: 1.5rem;">Generate Sample Data</h2>
+                
+                <div id="sampleAlert" class="alert"></div>
+
+                <p style="margin-bottom: 2rem; color: #6b7280;">
+                    Quickly populate your database with sample data for testing and demonstration purposes.
+                </p>
+
+                <div style="display: grid; gap: 1rem;">
+                    <button onclick="generateSamplePatients()" class="btn btn-primary">
+                        👥 Generate 10 Sample Patients
+                    </button>
+                    <button onclick="generateSampleAppointments()" class="btn btn-primary">
+                        📅 Generate 20 Sample Appointments
+                    </button>
+                    <button onclick="generateSampleStats()" class="btn btn-primary">
+                        📊 Generate Sample Statistics
+                    </button>
+                    <button onclick="generateAllSampleData()" class="btn btn-primary">
+                        🗂️ Generate All Sample Data
+                    </button>
+                </div>
+
+                <div id="sampleProgress" style="margin-top: 2rem; display: none;">
+                    <h3>Progress:</h3>
+                    <div id="sampleLog" style="background: #f3f4f6; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 0.9rem; max-height: 400px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backend Services -->
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth-service.js"></script>
+    <script src="js/database-service.js"></script>
+
+    <script>
+        let dbService = null;
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', async () => {
+            await checkConnection();
+        });
+
+        // Check backend connection
+        async function checkConnection() {
+            const alert = document.getElementById('connectionAlert');
+            
+            try {
+                await initializeServices();
+                dbService = window.databaseService;
+                
+                alert.className = 'alert success show';
+                alert.innerHTML = '✅ Connected to Supabase - Ready to input data';
+            } catch (error) {
+                alert.className = 'alert error show';
+                alert.innerHTML = `❌ Connection Error: ${error.message} - Please check your configuration`;
+            }
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Show alert
+        function showAlert(elementId, type, message) {
+            const alert = document.getElementById(elementId);
+            alert.className = `alert ${type} show`;
+            alert.innerHTML = message;
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+
+        // ==================== PATIENT FORM ====================
+
+        document.getElementById('patientForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner"></span> Adding patient...';
+
+                const allergies = document.getElementById('patientAllergies').value
+                    .split(',')
+                    .map(a => a.trim())
+                    .filter(a => a);
+
+                const patientData = {
+                    id_number: document.getElementById('patientIdNumber').value,
+                    full_name: document.getElementById('patientName').value,
+                    date_of_birth: document.getElementById('patientDOB').value,
+                    gender: document.getElementById('patientGender').value,
+                    blood_type: document.getElementById('patientBloodType').value || null,
+                    phone: document.getElementById('patientPhone').value,
+                    email: document.getElementById('patientEmail').value || null,
+                    address: document.getElementById('patientAddress').value || null,
+                    emergency_contact_name: document.getElementById('patientEmergencyName').value || null,
+                    emergency_contact_phone: document.getElementById('patientEmergencyPhone').value || null,
+                    allergies: allergies.length > 0 ? allergies : null,
+                    status: 'active'
+                };
+
+                const result = await dbService.createPatient(patientData);
+
+                if (result.success) {
+                    showAlert('patientAlert', 'success', `✅ Patient added successfully! ID: ${result.data.id_number}`);
+                    clearPatientForm();
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                showAlert('patientAlert', 'error', `❌ Error: ${error.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        });
+
+        function fillPatientDemo(type) {
+            if (type === 'thai') {
+                document.getElementById('patientIdNumber').value = '1109900123456';
+                document.getElementById('patientName').value = 'สมชาย ใจดี';
+                document.getElementById('patientDOB').value = '1990-05-15';
+                document.getElementById('patientGender').value = 'male';
+                document.getElementById('patientBloodType').value = 'B+';
+                document.getElementById('patientPhone').value = '0812345678';
+                document.getElementById('patientEmail').value = 'somchai@example.com';
+                document.getElementById('patientAddress').value = '123 ถนนพหลโยธิน เมือง เชียงราย 57000';
+                document.getElementById('patientEmergencyName').value = 'สมหญิง ใจดี';
+                document.getElementById('patientEmergencyPhone').value = '0898765432';
+                document.getElementById('patientAllergies').value = 'Penicillin';
+            } else {
+                document.getElementById('patientIdNumber').value = 'P' + Math.random().toString(36).substring(2, 9).toUpperCase();
+                document.getElementById('patientName').value = 'John Smith';
+                document.getElementById('patientDOB').value = '1985-08-20';
+                document.getElementById('patientGender').value = 'male';
+                document.getElementById('patientBloodType').value = 'O+';
+                document.getElementById('patientPhone').value = '+66812345678';
+                document.getElementById('patientEmail').value = 'john.smith@example.com';
+                document.getElementById('patientAddress').value = '456 Main Street, Chiang Rai';
+                document.getElementById('patientEmergencyName').value = 'Jane Smith';
+                document.getElementById('patientEmergencyPhone').value = '+66898765432';
+                document.getElementById('patientAllergies').value = 'None';
+            }
+        }
+
+        function clearPatientForm() {
+            document.getElementById('patientForm').reset();
+        }
+
+        // ==================== APPOINTMENT FORM ====================
+
+        document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner"></span> Scheduling...';
+
+                // First, find the patient
+                const patientIdNumber = document.getElementById('apptPatientId').value;
+                const patientsResult = await dbService.supabase
+                    .from('patients')
+                    .select('id')
+                    .eq('id_number', patientIdNumber)
+                    .single();
+
+                if (patientsResult.error) {
+                    throw new Error('Patient not found. Please add the patient first.');
+                }
+
+                const appointmentData = {
+                    patient_id: patientsResult.data.id,
+                    appointment_date: document.getElementById('apptDate').value,
+                    appointment_time: document.getElementById('apptTime').value,
+                    department: document.getElementById('apptDepartment').value,
+                    appointment_type: document.getElementById('apptType').value,
+                    reason: document.getElementById('apptReason').value || null,
+                    status: 'pending'
+                };
+
+                const result = await dbService.createAppointment(appointmentData);
+
+                if (result.success) {
+                    showAlert('appointmentAlert', 'success', '✅ Appointment scheduled successfully!');
+                    clearAppointmentForm();
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                showAlert('appointmentAlert', 'error', `❌ Error: ${error.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        });
+
+        function clearAppointmentForm() {
+            document.getElementById('appointmentForm').reset();
+        }
+
+        // ==================== QUEUE FORM ====================
+
+        document.getElementById('queueForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner"></span> Adding to queue...';
+
+                // Find the patient
+                const patientIdNumber = document.getElementById('queuePatientId').value;
+                const patientsResult = await dbService.supabase
+                    .from('patients')
+                    .select('id')
+                    .eq('id_number', patientIdNumber)
+                    .single();
+
+                if (patientsResult.error) {
+                    throw new Error('Patient not found. Please add the patient first.');
+                }
+
+                const queueData = {
+                    patient_id: patientsResult.data.id,
+                    department: document.getElementById('queueDepartment').value,
+                    queue_number: parseInt(document.getElementById('queueNumber').value),
+                    priority: document.getElementById('queuePriority').value,
+                    estimated_wait_time: document.getElementById('queueWaitTime').value || null,
+                    notes: document.getElementById('queueNotes').value || null,
+                    status: 'waiting'
+                };
+
+                const result = await dbService.addToQueue(queueData);
+
+                if (result.success) {
+                    showAlert('queueAlert', 'success', `✅ Added to queue! Queue #${queueData.queue_number}`);
+                    clearQueueForm();
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                showAlert('queueAlert', 'error', `❌ Error: ${error.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        });
+
+        function clearQueueForm() {
+            document.getElementById('queueForm').reset();
+        }
+
+        // ==================== SAMPLE DATA GENERATION ====================
+
+        function logSample(message) {
+            const log = document.getElementById('sampleLog');
+            const progress = document.getElementById('sampleProgress');
+            progress.style.display = 'block';
+            log.innerHTML += message + '\n';
+            log.scrollTop = log.scrollHeight;
+        }
+
+        async function generateSamplePatients() {
+            logSample('🔄 Generating sample patients...');
+            
+            const patients = [
+                { id_number: '1234567890123', full_name: 'สมชาย ใจดี', gender: 'male', phone: '0812345678', blood_type: 'B+' },
+                { id_number: '9876543210987', full_name: 'สมหญิง รักษา', gender: 'female', phone: '0898765432', blood_type: 'A+' },
+                { id_number: 'P12345678', full_name: 'John Smith', gender: 'male', phone: '+66812349999', blood_type: 'O+' },
+                { id_number: '1111222233334', full_name: 'วิทยา แพทย์ดี', gender: 'male', phone: '0811112222', blood_type: 'AB+' },
+                { id_number: '5555666677778', full_name: 'สุดา พยาบาล', gender: 'female', phone: '0855556666', blood_type: 'O-' },
+            ];
+
+            for (const patient of patients) {
+                try {
+                    await dbService.createPatient({
+                        ...patient,
+                        date_of_birth: '1990-01-01',
+                        status: 'active'
+                    });
+                    logSample(`✅ Added: ${patient.full_name}`);
+                } catch (error) {
+                    logSample(`⚠️  Skipped ${patient.full_name}: ${error.message}`);
+                }
+            }
+            
+            showAlert('sampleAlert', 'success', '✅ Sample patients generated!');
+            logSample('✅ Done generating patients!');
+        }
+
+        async function generateAllSampleData() {
+            document.getElementById('sampleLog').innerHTML = '';
+            await generateSamplePatients();
+            showAlert('sampleAlert', 'success', '✅ All sample data generated successfully!');
+        }
+    </script>
+</body>
+</html>
