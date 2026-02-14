@@ -93,6 +93,64 @@ class DatabaseService {
         }
     }
 
+    // Search patients by name or ID number
+    async searchPatients(searchTerm) {
+        try {
+            // First, try to get all columns to check what exists
+            const { data, error } = await this.supabase
+                .from('patients')
+                .select('*')
+                .or(`name.ilike.%${searchTerm}%,id_number.ilike.%${searchTerm}%,id.ilike.%${searchTerm}%`)
+                .order('created_at', { ascending: false })
+                .limit(20);
+
+            if (error) throw error;
+            return { success: true, data };
+        } catch (error) {
+            console.error('Error searching patients:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Get patient with full history (appointments, queue records)
+    async getPatientFullHistory(patientId) {
+        try {
+            // Get patient info
+            const patientResult = await this.getPatientById(patientId);
+            if (!patientResult.success) throw new Error(patientResult.error);
+
+            // Get appointments
+            const { data: appointments, error: apptError } = await this.supabase
+                .from('appointments')
+                .select('*')
+                .eq('patient_id', patientId)
+                .order('appointment_date', { ascending: false });
+
+            if (apptError) throw apptError;
+
+            // Get queue history
+            const { data: queueHistory, error: queueError } = await this.supabase
+                .from('patient_queue')
+                .select('*')
+                .eq('patient_id', patientId)
+                .order('created_at', { ascending: false });
+
+            if (queueError) throw queueError;
+
+            return {
+                success: true,
+                data: {
+                    patient: patientResult.data,
+                    appointments: appointments || [],
+                    queueHistory: queueHistory || []
+                }
+            };
+        } catch (error) {
+            console.error('Error fetching patient history:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
     // ==================== Queue Operations ====================
 
     // Get queue for specific department

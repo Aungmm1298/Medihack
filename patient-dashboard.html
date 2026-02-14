@@ -46,6 +46,7 @@
                 <li><a href="#queue" id="queueLink" onclick="showQueue(); return false;">ตรวจสอบคิว / Check Queue</a></li>
                 <li><a href="#progress" id="progressLink" onclick="showProgress(); return false;">ตรวจสอบความคืบหน้า / Check Progress</a></li>
                 <li><a href="#instructions" id="instructionsLink" onclick="showInstructions(); return false;">คำแนะนำแพทย์ / Doctor Instructions</a></li>
+                <li><a href="#history" id="historyLink" onclick="showPatientHistory(); return false;">ประวัติการรักษา / Medical History</a></li>
                 <li><a href="#waittime" id="waittimeLink" onclick="showWaitTime(); return false;">เวลารอ AI & แจ้งเตือน / AI Wait Time & Alerts</a></li>
                 <li><a href="#map" id="mapLink" onclick="showMap(); return false;">แผนที่ / View Map</a></li>
             </ul>
@@ -91,6 +92,11 @@
         </div>
     </footer>
 
+    <!-- External Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/database-service.js"></script>
+
     <script>
         // Check if user is logged in
         if (sessionStorage.getItem('loggedIn') !== 'true' || sessionStorage.getItem('userRole') !== 'patient') {
@@ -103,6 +109,16 @@
             document.getElementById('userName').textContent = userId;
         }
 
+        // Initialize database service
+        (async function initDatabaseService() {
+            try {
+                await window.databaseService.init();
+                console.log('Database service initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize database service:', error);
+            }
+        })();
+
         // Logout function
         function logout() {
             if (confirm('ต้องการออกจากระบบหรือไม่? / Do you want to logout?')) {
@@ -113,7 +129,7 @@
 
         // Update active menu
         function updateActiveMenu(activeId) {
-            const menuIds = ['overviewLink', 'queueLink', 'progressLink', 'instructionsLink', 'waittimeLink', 'mapLink'];
+            const menuIds = ['overviewLink', 'queueLink', 'progressLink', 'instructionsLink', 'historyLink', 'waittimeLink', 'mapLink'];
             menuIds.forEach(id => {
                 document.getElementById(id).classList.remove('active');
             });
@@ -351,18 +367,18 @@
                             <div style="position: absolute; left: -1.5rem; top: 20px; width: 2px; height: calc(100% - 20px); background: var(--mfu-green);"></div>
                             <div style="background: #d1fae5; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--mfu-green);">
                                 <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
-                                    <h4 style="margin: 0; color: var(--mfu-green);">ชำระเงิน / Payment</h4>
+                                    <h4 style="margin: 0; color: var(--mfu-green);">ตรวจร่างกาย / Physical Examination</h4>
                                     <span style="background: var(--mfu-green); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.875rem;">เสร็จสิ้น / Completed</span>
                                 </div>
-                                <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">เวลา: 09:15 น. / Time: 09:15 AM</p>
-                                <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">ชำระค่าบริการเรียบร้อย / Payment completed</p>
+                                <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">เวลา: 09:10 น. / Time: 09:10 AM</p>
+                                <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">ตรวจร่างกายเรียบร้อย / Examination completed</p>
                             </div>
                         </div>
 
                         <!-- Timeline Item 3 - In Progress -->
                         <div style="position: relative; padding-bottom: 2rem;">
                             <div style="position: absolute; left: -2rem; top: 0; width: 20px; height: 20px; background: #3B82F6; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px #3B82F6;"></div>
-                            <div style="position: absolute; left: -1.5rem; top: 20px; width: 2px; height: calc(100% - 20px); background: #e5e7eb;"></div>
+                            <div style="position: absolute; left: -1.5rem; top: 20px; width: 2px; height: calc(100% - 20px); background: var(--mfu-green);"></div>
                             <div style="background: #dbeafe; padding: 1rem; border-radius: 8px; border-left: 4px solid #3B82F6;">
                                 <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
                                     <h4 style="margin: 0; color: #3B82F6;">รอพบแพทย์ / Waiting for Doctor</h4>
@@ -379,10 +395,10 @@
                             <div style="position: absolute; left: -1.5rem; top: 20px; width: 2px; height: calc(100% - 20px); background: #e5e7eb;"></div>
                             <div style="background: #f9fafb; padding: 1rem; border-radius: 8px; border-left: 4px solid #e5e7eb;">
                                 <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
-                                    <h4 style="margin: 0; color: var(--text-secondary);">ตรวจร่างกาย / Physical Examination</h4>
+                                    <h4 style="margin: 0; color: var(--text-secondary);">ชำระเงิน / Payment</h4>
                                     <span style="background: #e5e7eb; color: var(--text-secondary); padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.875rem;">รอดำเนินการ / Pending</span>
                                 </div>
-                                <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">รอพบแพทย์ / Waiting for doctor</p>
+                                <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">รอชำระค่าบริการ / Waiting for payment</p>
                             </div>
                         </div>
 
@@ -434,7 +450,7 @@
                     <div style="background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
                         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
                             <div>
-                                <h4 style="margin: 0; color: var(--mfu-green);">นพ. สมชาย วรรณสุข / Dr. Somchai Wannasuk</h4>
+                                <h4 style="margin: 0; color: var(--mfu-green);">นพ. สมชาย วรรณสุข / Somchai Wannasuk</h4>
                                 <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.95rem;">แผนกอายุรกรรม / Internal Medicine</p>
                             </div>
                             <span style="background: #3B82F6; color: white; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.875rem;">รอพบแพทย์ / Waiting</span>
@@ -456,7 +472,7 @@
                     <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-gray);">
                         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
                             <div>
-                                <h4 style="margin: 0; color: var(--mfu-green);">พญ. มาลี สุขใจ / Dr. Malee Sukchai</h4>
+                                <h4 style="margin: 0; color: var(--mfu-green);">พญ. มาลี สุขใจ / Malee Sukchai</h4>
                                 <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.95rem;">แผนกอายุรกรรม / Internal Medicine</p>
                             </div>
                             <span style="color: var(--text-secondary); font-size: 0.9rem;">7 ม.ค. 2026 / Jan 7, 2026</span>
@@ -477,7 +493,7 @@
                     <div style="padding: 1.5rem;">
                         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
                             <div>
-                                <h4 style="margin: 0; color: var(--mfu-green);">นพ. วิชัย เก่งการ / Dr. Wichai Kengkan</h4>
+                                <h4 style="margin: 0; color: var(--mfu-green);">นพ. วิชัย เก่งการ / Wichai Kengkan</h4>
                                 <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.95rem;">แผนกทันตกรรม / Dental</p>
                             </div>
                             <span style="color: var(--text-secondary); font-size: 0.9rem;">20 ธ.ค. 2025 / Dec 20, 2025</span>
@@ -495,6 +511,318 @@
                     </div>
                 </div>
             `;
+        }
+
+        // Show Patient History
+        async function showPatientHistory() {
+            updateActiveMenu('historyLink');
+            
+            document.getElementById('mainContent').innerHTML = `
+                <h2 style="color: var(--mfu-green); margin-bottom: 1.5rem;">ประวัติการรักษา / Medical History</h2>
+                
+                <!-- Search Section -->
+                <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%); border-left: 6px solid #3B82F6; margin-bottom: 2rem;">
+                    <h3 style="color: #3B82F6; margin-bottom: 1rem;">ค้นหาประวัติผู้ป่วย / Search Patient Records</h3>
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                        <input 
+                            type="text" 
+                            id="patientSearchInput" 
+                            placeholder="ค้นหาด้วยชื่อหรือเลขประจำตัว / Search by name or ID number"
+                            style="flex: 1; padding: 0.75rem; border: 2px solid var(--border-gray); border-radius: 8px; font-size: 1rem;"
+                        />
+                        <button 
+                            class="btn btn-primary" 
+                            onclick="searchPatientsHistory()" 
+                            style="padding: 0.75rem 2rem;">
+                            ค้นหา / Search
+                        </button>
+                    </div>
+                    <div id="searchResults" style="margin-top: 1rem;"></div>
+                </div>
+
+                <!-- Current Patient History -->
+                <div id="patientHistoryContent">
+                    <div class="card">
+                        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                            <h3 style="color: var(--text-secondary);">ค้นหาผู้ป่วยเพื่อดูประวัติ / Search for a patient to view history</h3>
+                            <p>ใช้กล่องค้นหาด้านบนเพื่อค้นหาข้อมูลผู้ป่วยจากฐานข้อมูล</p>
+                            <p><em>Use the search box above to find patient records from database</em></p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Search patients from database
+        async function searchPatientsHistory() {
+            const searchTerm = document.getElementById('patientSearchInput').value.trim();
+            const searchResults = document.getElementById('searchResults');
+            
+            if (!searchTerm) {
+                searchResults.innerHTML = `
+                    <div style="padding: 1rem; background: #fef3c7; border-radius: 8px; color: #92400e;">
+                        ⚠️ กรุณาใส่ชื่อหรือเลขประจำตัวผู้ป่วย / Please enter patient name or ID number
+                    </div>
+                `;
+                return;
+            }
+
+            searchResults.innerHTML = `
+                <div style="padding: 1rem; text-align: center; color: var(--text-secondary);">
+                    <div style="display: inline-block; width: 24px; height: 24px; border: 3px solid #3B82F6; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 0.5rem;">กำลังค้นหา... / Searching...</p>
+                </div>
+            `;
+
+            try {
+                // Initialize database service if not already done
+                if (!window.databaseService.supabase) {
+                    await window.databaseService.init();
+                }
+
+                const result = await window.databaseService.searchPatients(searchTerm);
+                
+                if (!result.success) {
+                    searchResults.innerHTML = `
+                        <div style="padding: 1rem; background: #fee; border-radius: 8px; color: #c00;">
+                            ❌ เกิดข้อผิดพลาด: ${result.error}
+                        </div>
+                    `;
+                    return;
+                }
+
+                if (result.data.length === 0) {
+                    searchResults.innerHTML = `
+                        <div style="padding: 1rem; background: #f0f9ff; border-radius: 8px; color: var(--text-secondary);">
+                            ℹ️ ไม่พบข้อมูลผู้ป่วย / No patient records found
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Display search results
+                let resultsHTML = '<div style="margin-top: 1rem;"><h4 style="color: var(--mfu-green); margin-bottom: 1rem;">ผลการค้นหา / Search Results:</h4>';
+                
+                result.data.forEach(patient => {
+                    const statusColor = patient.status === 'active' ? 'var(--mfu-green)' : 
+                                       patient.status === 'in_treatment' ? '#3B82F6' : '#6B7280';
+                    // Support different column names (name, full_name, patient_name)
+                    const patientName = patient.name || patient.full_name || patient.patient_name || 'Unknown';
+                    resultsHTML += `
+                        <div style="padding: 1rem; background: white; border: 2px solid var(--border-gray); border-radius: 8px; margin-bottom: 1rem; cursor: pointer; transition: all 0.3s;"
+                             onclick="viewPatientHistory('${patient.id}')"
+                             onmouseover="this.style.borderColor='#3B82F6'; this.style.transform='translateY(-2px)'"
+                             onmouseout="this.style.borderColor='var(--border-gray)'; this.style.transform='translateY(0)'">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <h4 style="margin: 0; color: var(--mfu-green);">${patientName}</h4>
+                                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.95rem;">
+                                        ID: ${patient.id_number || patient.id || 'N/A'} | 
+                                        ${patient.gender || 'N/A'} | 
+                                        ${patient.date_of_birth || patient.dob || 'N/A'}
+                                    </p>
+                                    <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                        ${patient.phone || ''} ${patient.email ? '| ' + patient.email : ''}
+                                    </p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <span style="background: ${statusColor}; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.875rem;">
+                                        ${patient.status}
+                                    </span>
+                                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.875rem;">
+                                        ${patient.current_department || 'No department'}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                resultsHTML += '</div>';
+                searchResults.innerHTML = resultsHTML;
+
+            } catch (error) {
+                console.error('Error searching patients:', error);
+                searchResults.innerHTML = `
+                    <div style="padding: 1rem; background: #fee; border-radius: 8px; color: #c00;">
+                        ❌ เกิดข้อผิดพลาด: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // View full patient history
+        async function viewPatientHistory(patientId) {
+            const historyContent = document.getElementById('patientHistoryContent');
+            
+            historyContent.innerHTML = `
+                <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+                    <div style="display: inline-block; width: 48px; height: 48px; border: 4px solid var(--mfu-green); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 1rem; font-size: 1.125rem;">กำลังโหลดประวัติผู้ป่วย... / Loading patient history...</p>
+                </div>
+            `;
+
+            try {
+                const result = await window.databaseService.getPatientFullHistory(patientId);
+                
+                if (!result.success) {
+                    historyContent.innerHTML = `
+                        <div class="card">
+                            <div style="padding: 2rem; background: #fee; border-radius: 8px; color: #c00; text-align: center;">
+                                ❌ <strong>เกิดข้อผิดพลาด / Error:</strong> ${result.error}
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const { patient, appointments, queueHistory } = result.data;
+                
+                // Support flexible column names
+                const patientName = patient.name || patient.full_name || patient.patient_name || 'Unknown';
+                const patientId = patient.id_number || patient.id || 'N/A';
+                const patientDob = patient.date_of_birth || patient.dob || 'N/A';
+                
+                // Build patient history display
+                let historyHTML = `
+                    <!-- Patient Info Card -->
+                    <div class="card" style="background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border-left: 6px solid var(--mfu-green); margin-bottom: 2rem;">
+                        <h3 style="color: var(--mfu-green); margin-bottom: 1.5rem;">ข้อมูลผู้ป่วย / Patient Information</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                            <div>
+                                <h4 style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">ชื่อ-นามสกุล / Full Name</h4>
+                                <p style="font-size: 1.125rem; font-weight: 600; margin: 0;">${patientName}</p>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">เลขประจำตัว / ID Number</h4>
+                                <p style="font-size: 1.125rem; font-weight: 600; margin: 0;">${patientId}</p>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">วันเกิด / Date of Birth</h4>
+                                <p style="font-size: 1.125rem; font-weight: 600; margin: 0;">${patientDob}</p>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">เพศ / Gender</h4>
+                                <p style="font-size: 1.125rem; font-weight: 600; margin: 0;">${patient.gender || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">กรุ๊ปเลือด / Blood Type</h4>
+                                <p style="font-size: 1.125rem; font-weight: 600; margin: 0;">${patient.blood_type || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">สถานะ / Status</h4>
+                                <p style="font-size: 1.125rem; font-weight: 600; margin: 0; color: var(--mfu-green);">${patient.status || 'N/A'}</p>
+                            </div>
+                        </div>
+                        ${patient.allergies && patient.allergies.length > 0 ? `
+                            <div style="margin-top: 1.5rem; padding: 1rem; background: #fef3c7; border-radius: 8px; border-left: 4px solid #F59E0B;">
+                                <h4 style="color: #92400e; margin: 0 0 0.5rem 0;">⚠️ ประวัติการแพ้ / Allergies</h4>
+                                <p style="margin: 0; color: #78350f;">${patient.allergies.join(', ')}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <!-- Appointments History -->
+                    <div class="card" style="margin-bottom: 2rem;">
+                        <div class="card-header">
+                            <h3 class="card-title">ประวัติการนัดหมาย / Appointment History (${appointments.length})</h3>
+                        </div>
+                        ${appointments.length > 0 ? `
+                            <div style="overflow-x: auto;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <thead style="background: var(--mfu-green); color: white;">
+                                        <tr>
+                                            <th style="padding: 0.75rem; text-align: left;">วันที่ / Date</th>
+                                            <th style="padding: 0.75rem; text-align: left;">เวลา / Time</th>
+                                            <th style="padding: 0.75rem; text-align: left;">แผนก / Department</th>
+                                            <th style="padding: 0.75rem; text-align: left;">ประเภท / Type</th>
+                                            <th style="padding: 0.75rem; text-align: center;">สถานะ / Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${appointments.map((apt, idx) => `
+                                            <tr style="border-bottom: 1px solid var(--border-gray); ${idx % 2 === 0 ? 'background: #f9fafb;' : ''}">
+                                                <td style="padding: 0.75rem;">${apt.appointment_date}</td>
+                                                <td style="padding: 0.75rem;">${apt.appointment_time}</td>
+                                                <td style="padding: 0.75rem;">${apt.department}</td>
+                                                <td style="padding: 0.75rem;">${apt.appointment_type || '-'}</td>
+                                                <td style="padding: 0.75rem; text-align: center;">
+                                                    <span style="background: ${apt.status === 'completed' ? 'var(--mfu-green)' : apt.status === 'cancelled' ? '#EF4444' : '#3B82F6'}; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.875rem;">
+                                                        ${apt.status}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ` : `
+                            <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+                                <p>ไม่มีประวัติการนัดหมาย / No appointment history</p>
+                            </div>
+                        `}
+                    </div>
+
+                    <!-- Queue History -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">ประวัติการเข้าคิว / Queue History (${queueHistory.length})</h3>
+                        </div>
+                        ${queueHistory.length > 0 ? `
+                            <div style="overflow-x: auto;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <thead style="background: var(--mfu-green); color: white;">
+                                        <tr>
+                                            <th style="padding: 0.75rem; text-align: left;">หมายเลขคิว / Queue No.</th>
+                                            <th style="padding: 0.75rem; text-align: left;">แผนก / Department</th>
+                                            <th style="padding: 0.75rem; text-align: left;">เช็คอิน / Check-in</th>
+                                            <th style="padding: 0.75rem; text-align: center;">ลำดับความสำคัญ / Priority</th>
+                                            <th style="padding: 0.75rem; text-align: center;">สถานะ / Status</th>
+                                            <th style="padding: 0.75rem; text-align: right;">เวลารอ (นาที) / Wait Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${queueHistory.map((queue, idx) => `
+                                            <tr style="border-bottom: 1px solid var(--border-gray); ${idx % 2 === 0 ? 'background: #f9fafb;' : ''}">
+                                                <td style="padding: 0.75rem; font-weight: 700;">${queue.queue_number}</td>
+                                                <td style="padding: 0.75rem;">${queue.department}</td>
+                                                <td style="padding: 0.75rem;">${new Date(queue.checked_in_at).toLocaleString('th-TH')}</td>
+                                                <td style="padding: 0.75rem; text-align: center;">
+                                                    <span style="background: ${queue.priority === 'emergency' ? '#EF4444' : queue.priority === 'urgent' ? '#F59E0B' : '#6B7280'}; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.875rem;">
+                                                        ${queue.priority}
+                                                    </span>
+                                                </td>
+                                                <td style="padding: 0.75rem; text-align: center;">
+                                                    <span style="background: ${queue.status === 'completed' ? 'var(--mfu-green)' : queue.status === 'cancelled' ? '#EF4444' : '#3B82F6'}; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.875rem;">
+                                                        ${queue.status}
+                                                    </span>
+                                                </td>
+                                                <td style="padding: 0.75rem; text-align: right;">${queue.estimated_wait_time || '-'}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ` : `
+                            <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+                                <p>ไม่มีประวัติการเข้าคิว / No queue history</p>
+                            </div>
+                        `}
+                    </div>
+                `;
+
+                historyContent.innerHTML = historyHTML;
+
+            } catch (error) {
+                console.error('Error loading patient history:', error);
+                historyContent.innerHTML = `
+                    <div class="card">
+                        <div style="padding: 2rem; background: #fee; border-radius: 8px; color: #c00; text-align: center;">
+                            ❌ <strong>เกิดข้อผิดพลาด / Error:</strong> ${error.message}
+                        </div>
+                    </div>
+                `;
+            }
         }
 
         // Show AI Wait Time & Notifications

@@ -1307,3 +1307,13 @@ p {
 .hero-section .btn:last-of-type {
     animation-delay: 0.5s;
 }
+
+/* Loading Spinner Animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
