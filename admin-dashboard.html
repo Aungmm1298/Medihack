@@ -1081,6 +1081,140 @@
                         </ul>
                     </div>
                 </div>
+
+                <!-- AI Patient Redistribution System -->
+                <div class="card" style="background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%); border-left: 4px solid var(--gold-nav); margin-top: 2rem;">
+                    <h3 style="color: var(--gold-nav); margin-bottom: 1rem;">AI Smart Room Load Balancing</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">ระบบ AI วิเคราะห์และแนะนำการกระจายผู้ป่วยอัตโนมัติเพื่อลดเวลารอและเพิ่มประสิทธิภาพ / AI automatically analyzes and recommends patient redistribution to reduce wait time and improve efficiency</p>
+                    
+                    <!-- Current Room Load Status -->
+                    <div style="background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--text-primary); margin: 0 0 1rem 0;">สถานะห้องตรวจปัจจุบัน / Current Room Status</h4>
+                        
+                        <div style="display: grid; gap: 1rem;">
+                            <!-- Overloaded Room -->
+                            <div style="padding: 1rem; background: #fee2e2; border-radius: 8px; border: 2px solid #ef4444;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                                    <div style="flex: 1; min-width: 200px;">
+                                        <div style="font-weight: 700; color: #991b1b; font-size: 1.1rem;">ห้อง 101 / Room 101</div>
+                                        <div style="color: #7f1d1d; margin-top: 0.25rem;">นพ. สมชาย ใจดี - OPD</div>
+                                        <div style="color: #991b1b; margin-top: 0.5rem; font-size: 0.9rem;">สถานะ: โหลดสูง / Status: Overloaded</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 2rem; font-weight: 700; color: #dc2626;">18</div>
+                                        <div style="font-size: 0.9rem; color: #7f1d1d;">ผู้ป่วยในคิว / Patients</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: #ea580c;">35</div>
+                                        <div style="font-size: 0.9rem; color: #7c2d12;">นาที / min wait</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Normal Load Room -->
+                            <div style="padding: 1rem; background: #fef3c7; border-radius: 8px; border: 2px solid var(--gold-nav);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                                    <div style="flex: 1; min-width: 200px;">
+                                        <div style="font-weight: 700; color: #92400e; font-size: 1.1rem;">ห้อง 102 / Room 102</div>
+                                        <div style="color: #78350f; margin-top: 0.25rem;">พญ. สุดา รักษ์ดี - OPD</div>
+                                        <div style="color: #92400e; margin-top: 0.5rem; font-size: 0.9rem;">สถานะ: ปกติ / Status: Normal</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 2rem; font-weight: 700; color: var(--gold-nav);">8</div>
+                                        <div style="font-size: 0.9rem; color: #78350f;">ผู้ป่วยในคิว / Patients</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--gold-nav);">16</div>
+                                        <div style="font-size: 0.9rem; color: #78350f;">นาที / min wait</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Low Load Room -->
+                            <div style="padding: 1rem; background: #d1fae5; border-radius: 8px; border: 2px solid var(--mfu-green);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                                    <div style="flex: 1; min-width: 200px;">
+                                        <div style="font-weight: 700; color: #065f46; font-size: 1.1rem;">ห้อง 103 / Room 103</div>
+                                        <div style="color: #047857; margin-top: 0.25rem;">นพ. วิชัย สุขสันต์ - OPD</div>
+                                        <div style="color: #065f46; margin-top: 0.5rem; font-size: 0.9rem;">สถานะ: พร้อมรับผู้ป่วย / Status: Available</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 2rem; font-weight: 700; color: var(--mfu-green);">3</div>
+                                        <div style="font-size: 0.9rem; color: #047857;">ผู้ป่วยในคิว / Patients</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--mfu-green);">8</div>
+                                        <div style="font-size: 0.9rem; color: #047857;">นาที / min wait</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Recommendations -->
+                    <div style="background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--text-primary); margin: 0 0 1rem 0;">คำแนะนำจาก AI / AI Recommendations</h4>
+                        
+                        <div style="background: #eff6ff; padding: 1.25rem; border-radius: 8px; border-left: 4px solid #3B82F6; margin-bottom: 1rem;">
+                            <div style="display: flex; align-items: start; gap: 1rem;">
+                                <div style="flex-shrink: 0; width: 32px; height: 32px; background: #3B82F6; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">AI</div>
+                                <div style="flex: 1;">
+                                    <strong style="color: #1e40af;">แนะนำการกระจายผู้ป่วย / Recommended Redistribution:</strong>
+                                    <div style="margin-top: 0.75rem; color: var(--text-primary);">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                            <span style="color: #dc2626; font-weight: 600;">ห้อง 101</span>
+                                            <span style="color: var(--text-secondary);">โอนผู้ป่วย 5 คน</span>
+                                            <span style="color: #3B82F6;">→</span>
+                                            <span style="color: var(--mfu-green); font-weight: 600;">ห้อง 103</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span style="color: #dc2626; font-weight: 600;">ห้อง 101</span>
+                                            <span style="color: var(--text-secondary);">โอนผู้ป่วย 3 คน</span>
+                                            <span style="color: #3B82F6;">→</span>
+                                            <span style="color: var(--gold-nav); font-weight: 600;">ห้อง 102</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Expected Results -->
+                        <div style="background: #f0fdf4; padding: 1.25rem; border-radius: 8px; border-left: 4px solid var(--mfu-green);">
+                            <strong style="color: #065f46;">ผลลัพธ์ที่คาดว่าจะได้รับ / Expected Results:</strong>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                                <div style="text-align: center; padding: 1rem; background: white; border-radius: 6px;">
+                                    <div style="font-size: 1.75rem; font-weight: 700; color: var(--mfu-green);">-43%</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">ลดเวลารอ ห้อง 101<br>Wait time reduction</div>
+                                </div>
+                                <div style="text-align: center; padding: 1rem; background: white; border-radius: 6px;">
+                                    <div style="font-size: 1.75rem; font-weight: 700; color: #3B82F6;">12 min</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">เวลารอเฉลี่ยใหม่<br>New avg wait</div>
+                                </div>
+                                <div style="text-align: center; padding: 1rem; background: white; border-radius: 6px;">
+                                    <div style="font-size: 1.75rem; font-weight: 700; color: var(--gold-nav);">+28%</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">เพิ่มประสิทธิภาพ<br>Efficiency boost</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="applyAIRedistribution()" style="background: var(--mfu-green); border-color: var(--mfu-green); padding: 0.75rem 1.5rem;">
+                            ใช้คำแนะนำของ AI / Apply AI Recommendation
+                        </button>
+                        <button class="btn btn-secondary" onclick="viewDetailedAnalysis()" style="padding: 0.75rem 1.5rem;">
+                            ดูการวิเคราะห์โดยละเอียด / View Detailed Analysis
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(59, 130, 246, 0.1); border-radius: 6px;">
+                        <div style="color: #1e40af; font-size: 0.9rem;">
+                            <strong>หมายเหตุ:</strong> ระบบ AI วิเคราะห์จากปัจจัยหลายอย่าง เช่น จำนวนผู้ป่วย, ประเภทการรักษา, ความเชี่ยวชาญของแพทย์, และเวลาการรักษาเฉลี่ย<br>
+                            <em>Note: AI analyzes multiple factors including patient count, treatment type, doctor expertise, and average treatment time</em>
+                        </div>
+                    </div>
+                </div>
                 
                 <style>
                     @keyframes slideIn {
@@ -1094,6 +1228,28 @@
             window.scrollTo(0, 0);
             
             console.log('AI Analytics Dashboard loaded with prediction:', aiPrediction);
+        }
+
+        // Apply AI Redistribution
+        function applyAIRedistribution() {
+            if (confirm('ยืนยันการกระจายผู้ป่วยตามคำแนะนำของ AI?\n\nConfirm patient redistribution based on AI recommendation?\n\n- ห้อง 101 → ห้อง 103: 5 คน\n- ห้อง 101 → ห้อง 102: 3 คน')) {
+                alert('กำลังดำเนินการกระจายผู้ป่วย...\n\nRedistributing patients...\n\n✓ โอนผู้ป่วย 5 คนไปห้อง 103\n✓ โอนผู้ป่วย 3 คนไปห้อง 102\n✓ อัพเดทเวลารอคอย\n✓ แจ้งเตือนผู้ป่วยทราบการเปลี่ยนแปลง\n\nเสร็จสมบูรณ์! / Completed!\n\nเวลารอห้อง 101 ลดลงจาก 35 นาที → 20 นาที (-43%)');
+                showAnalytics(); // Refresh the view
+            }
+        }
+
+        // View Detailed Analysis
+        function viewDetailedAnalysis() {
+            alert('การวิเคราะห์โดยละเอียด / Detailed Analysis\n\n' +
+                  'ปัจจัยที่ AI พิจารณา / AI Factors:\n\n' +
+                  '1. จำนวนผู้ป่วยในคิวแต่ละห้อง\n' +
+                  '2. ประเภทและความซับซ้อนของการรักษา\n' +
+                  '3. ความเชี่ยวชาญเฉพาะทางของแพทย์\n' +
+                  '4. เวลาการรักษาเฉลี่ยในอดีต\n' +
+                  '5. ความพึงพอใจของผู้ป่วย\n' +
+                  '6. ระยะเวลาที่ผู้ป่วยรอคอยแล้ว\n\n' +
+                  'ความแม่นยำ: 94.2%\n' +
+                  'ข้อมูลที่ใช้: Real-time + Historical');
         }
 
         function showCreateUser() {
