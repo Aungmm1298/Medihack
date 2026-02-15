@@ -1267,6 +1267,20 @@ p {
         gap: 1.5rem;
         text-align: center;
     }
+    
+    /* Center queue card on mobile */
+    .card > div[style*="justify-content: space-between"] {
+        justify-content: center !important;
+        text-align: center !important;
+    }
+    
+    .card > div[style*="justify-content: space-between"] > div {
+        text-align: center !important;
+    }
+    
+    .card > div[style*="justify-content: space-between"] > div[style*="text-align: right"] {
+        text-align: center !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1499,6 +1513,20 @@ p {
     .footer p,
     .footer a {
         font-size: 0.9rem;
+    }
+    
+    /* Center queue card on mobile */
+    .card > div[style*="justify-content: space-between"] {
+        justify-content: center !important;
+        text-align: center !important;
+    }
+    
+    .card > div[style*="justify-content: space-between"] > div {
+        text-align: center !important;
+    }
+    
+    .card > div[style*="justify-content: space-between"] > div[style*="text-align: right"] {
+        text-align: center !important;
     }
 }
 
