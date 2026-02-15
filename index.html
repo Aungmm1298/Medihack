@@ -92,41 +92,117 @@
     
     </section>
 
-    <!-- Current Status Overview -->
-    <section class="container">
-        <h2 class="text-center" style="margin-top: 3rem; color: var(--mfu-green);">สถานะปัจจุบัน / Current Status</h2>
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-value">24</div>
-                <div class="stat-label">ผู้ป่วยในคิว<br>Patients in Queue</div>
-                <div class="stat-change positive">↓ ลดลง 3 คน</div>
+    <!-- Hospital News Carousel -->
+    <section class="container" style="margin-top: 3rem;">
+        <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); border-left: 6px solid var(--mfu-green); padding: 3rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h2 style="color: var(--mfu-green); margin: 0; font-size: 2.25rem; font-weight: 700;">ข่าวสารโรงพยาบาล / Hospital News</h2>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button onclick="prevNewsSlide()" class="carousel-btn" style="background: var(--mfu-green); color: white; border: none; width: 55px; height: 55px; border-radius: 50%; cursor: pointer; font-size: 2rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s; box-shadow: 0 3px 6px rgba(0,0,0,0.15);" onmouseover="this.style.background='var(--mfu-green-dark)'" onmouseout="this.style.background='var(--mfu-green)'">
+                        ‹
+                    </button>
+                    <button onclick="nextNewsSlide()" class="carousel-btn" style="background: var(--mfu-green); color: white; border: none; width: 55px; height: 55px; border-radius: 50%; cursor: pointer; font-size: 2rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s; box-shadow: 0 3px 6px rgba(0,0,0,0.15);" onmouseover="this.style.background='var(--mfu-green-dark)'" onmouseout="this.style.background='var(--mfu-green)'">
+                        ›
+                    </button>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value">15</div>
-                <div class="stat-label">นาที<br>Average Wait Time</div>
-                <div class="stat-change positive">↓ ดีขึ้น 5 นาที</div>
+            
+            <!-- Carousel Container -->
+            <div style="position: relative; overflow: hidden; border-radius: 16px; box-shadow: 0 6px 12px rgba(0,0,0,0.08);">
+                <div id="hospitalNewsCarousel" style="display: flex; transition: transform 0.5s ease-in-out;">
+                    <!-- Slide 1 -->
+                    <div class="hospital-news-slide" style="min-width: 100%; padding: 4rem 3rem; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);">
+                        <div style="display: flex; align-items: center; gap: 3rem; flex-wrap: wrap;">
+                            <div style="flex-shrink: 0;">
+                                <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=500&h=350&fit=crop" alt="Clinic Building" style="width: 420px; height: 280px; object-fit: cover; border-radius: 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.15);" onerror="this.src='images/mfu-logo.png'; this.style.width='200px'; this.style.height='200px'; this.style.objectFit='contain';">
+                            </div>
+                            <div style="flex: 1; min-width: 300px;">
+                                <h3 style="color: var(--mfu-green); margin-bottom: 1.5rem; font-size: 2.25rem; font-weight: 700;">เปิดบริการคลินิกพิเศษวันเสาร์</h3>
+                                <p style="color: var(--text-secondary); margin: 0; font-size: 1.3rem; line-height: 2;">
+                                    ตั้งแต่วันที่ 15 กุมภาพันธ์ 2026 เปิดบริการทุกวันเสาร์ 08:00-12:00 น.<br>
+                                    <span style="color: var(--text-light); font-size: 1.1rem;">Special Saturday Clinic now open from 8:00 AM - 12:00 PM starting February 15, 2026</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 2 -->
+                    <div class="hospital-news-slide" style="min-width: 100%; padding: 4rem 3rem; background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);">
+                        <div style="display: flex; align-items: center; gap: 3rem; flex-wrap: wrap;">
+                            <div style="flex-shrink: 0;">
+                                <img src="https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=500&h=350&fit=crop" alt="Vaccination" style="width: 420px; height: 280px; object-fit: cover; border-radius: 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.15);" onerror="this.src='images/mfu-logo.png'; this.style.width='200px'; this.style.height='200px'; this.style.objectFit='contain';">
+                            </div>
+                            <div style="flex: 1; min-width: 300px;">
+                                <h3 style="color: #1565c0; margin-bottom: 1.5rem; font-size: 2.25rem; font-weight: 700;">ฉีดวัคซีนไข้หวัดใหญ่ฟรี</h3>
+                                <p style="color: var(--text-secondary); margin: 0; font-size: 1.3rem; line-height: 2;">
+                                    สำหรับผู้สูงอายุ 60 ปีขึ้นไป ลงทะเบียนได้ที่เคาน์เตอร์บริการ<br>
+                                    <span style="color: var(--text-light); font-size: 1.1rem;">Free flu vaccination for seniors 60+. Register at service counter</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 3 -->
+                    <div class="hospital-news-slide" style="min-width: 100%; padding: 4rem 3rem; background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);">
+                        <div style="display: flex; align-items: center; gap: 3rem; flex-wrap: wrap;">
+                            <div style="flex-shrink: 0;">
+                                <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500&h=350&fit=crop" alt="Online Payment" style="width: 420px; height: 280px; object-fit: cover; border-radius: 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.15);" onerror="this.src='images/mfu-logo.png'; this.style.width='200px'; this.style.height='200px'; this.style.objectFit='contain';">
+                            </div>
+                            <div style="flex: 1; min-width: 300px;">
+                                <h3 style="color: #e65100; margin-bottom: 1.5rem; font-size: 2.25rem; font-weight: 700;">ระบบชำระเงินออนไลน์</h3>
+                                <p style="color: var(--text-secondary); margin: 0; font-size: 1.3rem; line-height: 2;">
+                                    รองรับ QR Code พร้อมเพย์ และบัตรเครดิต ชำระได้ง่ายปลอดภัย<br>
+                                    <span style="color: var(--text-light); font-size: 1.1rem;">Online payment now available - QR Code, PromptPay & Credit Cards accepted</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 4 -->
+                    <div class="hospital-news-slide" style="min-width: 100%; padding: 4rem 3rem; background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);">
+                        <div style="display: flex; align-items: center; gap: 3rem; flex-wrap: wrap;">
+                            <div style="flex-shrink: 0;">
+                                <img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=500&h=350&fit=crop" alt="Health Checkup" style="width: 420px; height: 280px; object-fit: cover; border-radius: 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.15);" onerror="this.src='images/mfu-logo.png'; this.style.width='200px'; this.style.height='200px'; this.style.objectFit='contain';">
+                            </div>
+                            <div style="flex: 1; min-width: 300px;">
+                                <h3 style="color: #c2185b; margin-bottom: 1.5rem; font-size: 2.25rem; font-weight: 700;">ตรวจสุขภาพประจำปี 2026</h3>
+                                <p style="color: var(--text-secondary); margin: 0; font-size: 1.3rem; line-height: 2;">
+                                    แพ็กเกจตรวจสุขภาพครบวงจร ราคาพิเศษ 2,500 บาท จองคิวออนไลน์ได้แล้ววันนี้<br>
+                                    <span style="color: var(--text-light); font-size: 1.1rem;">Annual health checkup package - Special price 2,500 THB. Book online now</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 5 -->
+                    <div class="hospital-news-slide" style="min-width: 100%; padding: 4rem 3rem; background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);">
+                        <div style="display: flex; align-items: center; gap: 3rem; flex-wrap: wrap;">
+                            <div style="flex-shrink: 0;">
+                                <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500&h=350&fit=crop" alt="Medical App" style="width: 420px; height: 280px; object-fit: cover; border-radius: 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.15);" onerror="this.src='images/mfu-logo.png'; this.style.width='200px'; this.style.height='200px'; this.style.objectFit='contain';">
+                            </div>
+                            <div style="flex: 1; min-width: 300px;">
+                                <h3 style="color: #7b1fa2; margin-bottom: 1.5rem; font-size: 2.25rem; font-weight: 700;">แอปพลิเคชันใหม่ MFU MCH Connect</h3>
+                                <p style="color: var(--text-secondary); margin: 0; font-size: 1.3rem; line-height: 2;">
+                                    ดาวน์โหลดแอป MFU MCH Connect เพื่อจองนัดและตรวจผลแลปได้ทุกที่ทุกเวลา<br>
+                                    <span style="color: var(--text-light); font-size: 1.1rem;">Download MFU MCH Connect app - Book appointments & check lab results anytime</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value">8</div>
-                <div class="stat-label">ห้องตรวจ<br>Active Rooms</div>
-                <div class="stat-change">→ คงที่</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">142</div>
-                <div class="stat-label">ผู้ป่วยวันนี้<br>Today's Patients</div>
-                <div class="stat-change positive">↑ เพิ่ม 12 คน</div>
+            
+            <!-- Slide Indicators -->
+            <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 3rem;">
+                <span id="newsIndicator0" class="news-slide-indicator" onclick="goToNewsSlide(0)" style="width: 40px; height: 14px; border-radius: 7px; background: var(--mfu-green); cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 6px rgba(27, 121, 72, 0.4);"></span>
+                <span id="newsIndicator1" class="news-slide-indicator" onclick="goToNewsSlide(1)" style="width: 14px; height: 14px; border-radius: 7px; background: var(--border-gray); cursor: pointer; transition: all 0.3s;"></span>
+                <span id="newsIndicator2" class="news-slide-indicator" onclick="goToNewsSlide(2)" style="width: 14px; height: 14px; border-radius: 7px; background: var(--border-gray); cursor: pointer; transition: all 0.3s;"></span>
+                <span id="newsIndicator3" class="news-slide-indicator" onclick="goToNewsSlide(3)" style="width: 14px; height: 14px; border-radius: 7px; background: var(--border-gray); cursor: pointer; transition: all 0.3s;"></span>
+                <span id="newsIndicator4" class="news-slide-indicator" onclick="goToNewsSlide(4)" style="width: 14px; height: 14px; border-radius: 7px; background: var(--border-gray); cursor: pointer; transition: all 0.3s;"></span>
             </div>
         </div>
     </section>
-
-    <!-- Alert Section -->
-    <section class="container">
-        <div class="alert alert-info">
-            <div>
-                <strong>ประกาศ / Announcement:</strong> ระบบคาดการณ์เวลารอคอยทำงานปกติ - AI wait-time prediction is operating normally
-            </div>
-        </div>
-    </section>
+    
     <!-- Key Features -->
     <section class="container" id="about" style="margin-top: 4rem;">
         <h2 class="text-center" style="color: var(--mfu-green); margin-bottom: 2rem;">ความสามารถหลัก / Key Features</h2>
@@ -490,6 +566,68 @@
                     menu.style.display = '';
                 });
             }
+        });
+
+        // Hospital News Carousel functionality
+        let currentNewsSlide = 0;
+        let newsCarouselInterval;
+        const totalNewsSlides = 5;
+
+        function updateNewsCarousel() {
+            const carousel = document.getElementById('hospitalNewsCarousel');
+            if (carousel) {
+                carousel.style.transform = `translateX(-${currentNewsSlide * 100}%)`;
+                
+                // Update indicators
+                for (let i = 0; i < totalNewsSlides; i++) {
+                    const indicator = document.getElementById(`newsIndicator${i}`);
+                    if (indicator) {
+                        indicator.style.background = i === currentNewsSlide ? 'var(--mfu-green)' : 'var(--border-gray)';
+                        indicator.style.width = i === currentNewsSlide ? '40px' : '14px';
+                        indicator.style.boxShadow = i === currentNewsSlide ? '0 2px 6px rgba(27, 121, 72, 0.4)' : 'none';
+                    }
+                }
+            }
+        }
+
+        function nextNewsSlide() {
+            currentNewsSlide = (currentNewsSlide + 1) % totalNewsSlides;
+            updateNewsCarousel();
+            resetNewsAutoSlide();
+        }
+
+        function prevNewsSlide() {
+            currentNewsSlide = (currentNewsSlide - 1 + totalNewsSlides) % totalNewsSlides;
+            updateNewsCarousel();
+            resetNewsAutoSlide();
+        }
+
+        function goToNewsSlide(index) {
+            currentNewsSlide = index;
+            updateNewsCarousel();
+            resetNewsAutoSlide();
+        }
+
+        function startNewsAutoSlide() {
+            newsCarouselInterval = setInterval(() => {
+                nextNewsSlide();
+            }, 5000); // Change slide every 5 seconds
+        }
+
+        function resetNewsAutoSlide() {
+            clearInterval(newsCarouselInterval);
+            startNewsAutoSlide();
+        }
+
+        // Initialize carousel on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateNewsCarousel();
+            startNewsAutoSlide();
+        });
+
+        // Stop auto-slide when user leaves the page
+        window.addEventListener('beforeunload', () => {
+            clearInterval(newsCarouselInterval);
         });
     </script>
 </body>
